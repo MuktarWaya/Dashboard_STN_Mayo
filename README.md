@@ -46,7 +46,7 @@ deploymentId ดูจาก `clasp deployments` (ตัวที่ตรงก
 
 เหลือขั้นตอนเดียวที่ต้องทำในเบราว์เซอร์ (ครั้งเดียว): **อนุญาตสิทธิ์สคริปต์ + สร้างชีต**
 
-1. เปิดโปรเจกต์: <https://script.google.com/d/1zCO1pwJTInib1Zt-jVGMJHKmMwewhPrXaM9QQMINp1HYQHb__7iO8j50/edit>
+1. เปิดโปรเจกต์: <https://script.google.com/d/1WDqgJXaeq3UeYwnzaFDUV97SRcoacxRSnHZbJ99uxjrkJ6JrslUGaXC-/edit>
 2. เลือกฟังก์ชัน `setupSheets` แล้วกด **Run** → กดยอมรับสิทธิ์ (Authorize) เมื่อระบบถาม
    → ชีต `Facilities`, `ProgramOwners`, `MonthlySummary`, `FacilityProgress`, `VaccineMonthly`, `CancerTracking`, `AuditLog` จะถูกสร้างพร้อมข้อมูลตัวอย่าง
 3. ทดสอบเปิด `<URL ใน ENV.txt>?action=all&year=2569&month=07` ต้องได้ JSON

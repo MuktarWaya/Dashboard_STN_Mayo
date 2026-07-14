@@ -555,7 +555,7 @@
    - โค้ดฝั่ง GAS อยู่ที่ gas/Code.gs
    ========================================================================= */
 const CONFIG = {
-  GAS_URL: 'https://script.google.com/macros/s/AKfycbyzVA3QA2y6BWluUgZ9b4_Xd9lu7hXTnKWfEdBYuHenJWEf906fFoTJLwiwIPMhBO-Ajg/exec',
+  GAS_URL: 'https://script.google.com/macros/s/AKfycbxDSzYCX7LAxVcKi8YECaOEI2-_Jqthlvzh-z_-sBZpo_2QM3Rhp-dvB6iaTYAJfqsJ/exec',
   year: 2569,
   month: '07',
   useLiveData: true // ตั้งเป็น false ถ้าต้องการใช้ mock data อย่างเดียว (เช่น เดโมออฟไลน์)
@@ -691,7 +691,7 @@ const MOCK_DATA = {
 function renderDashboard(DATA) {
 
 /* ---------- helpers ---------- */
-const fmt = n => n.toLocaleString('th-TH');
+const fmt = n => Number.isFinite(Number(n)) ? Number(n).toLocaleString('th-TH') : '—';
 const T = DATA.meta.statusThresholds;
 const L = DATA.meta.statusLabels;
 function statusOf(pct) {
@@ -767,32 +767,33 @@ document.getElementById('vacChartX').innerHTML =
 
 const lastM = vac.months[vac.months.length - 1];
 const prevM = vac.months[vac.months.length - 2];
-document.getElementById('vacGoalNote').textContent =
-  `เดือนล่าสุด (${lastM.label}) ฉีดเพิ่ม ${fmt(lastM.vaccinatedInMonth)} ราย รวมสะสม ${fmt(lastM.cumulative)} จากเป้าหมาย ${fmt(vac.targetTotal)} ราย ` +
-  `(+${(lastM.cumulativePercent - prevM.cumulativePercent).toFixed(1)} จุดจากเดือนก่อน) — แนวโน้มเพิ่มขึ้นต่อเนื่องทุกเดือน`;
+document.getElementById('vacGoalNote').textContent = lastM
+  ? `เดือนล่าสุด (${lastM.label}) ดำเนินการ ${fmt(lastM.vaccinatedInMonth)} ราย รวมสะสม ${fmt(lastM.cumulative)} จากเป้าหมาย ${fmt(vac.targetTotal)} ราย` +
+    (prevM ? ` (${(lastM.cumulativePercent - prevM.cumulativePercent).toFixed(1)} จุดจากเดือนก่อน)` : ' (ข้อมูลเดือนแรกที่รายงาน)')
+  : 'ยังไม่มีข้อมูลวัคซีนรายเดือนสำหรับช่วงเวลาที่เลือก';
 
 const vp = DATA.programs.find(p => p.id === 'vaccine');
-const vm = Object.fromEntries(vp.metrics.map(m => [m.label, m.value]));
-document.getElementById('vacSide').innerHTML = `
-  <div class="stat-box neutral"><span class="s-label">เป้าหมายเด็ก 0-5 ปี</span><span class="s-value">${fmt(vm['เป้าหมายเด็ก 0-5 ปี'])}</span></div>
-  <div class="stat-box good"><span class="s-label">ฉีดตามเกณฑ์</span><span class="s-value">${fmt(vm['ฉีดตามเกณฑ์'])}</span></div>
-  <div class="stat-box warn"><span class="s-label">ล่าช้า</span><span class="s-value">${fmt(vm['ล่าช้า'])}</span></div>
-  <div class="stat-box bad"><span class="s-label">ปฏิเสธ</span><span class="s-value">${fmt(vm['ปฏิเสธ'])}</span></div>
-  <div class="stat-box bad"><span class="s-label">ไม่ทราบสถานะ/คงค้าง</span><span class="s-value">${fmt(vm['ไม่ทราบสถานะ/คงค้าง'])}</span></div>`;
+const vaccineMetrics = vp?.metrics || [];
+document.getElementById('vacSide').innerHTML = vaccineMetrics.length
+  ? vaccineMetrics.map((m, index) => `
+      <div class="stat-box ${index === 0 ? 'neutral' : 'good'}">
+        <span class="s-label">${m.label}</span><span class="s-value">${fmt(m.value)}</span>
+      </div>`).join('')
+  : '<div class="stat-box neutral"><span class="s-label">ยังไม่มีข้อมูลตัวชี้วัดวัคซีน</span></div>';
 
 /* ---------- cancer section ---------- */
 const cs = DATA.cancerTracking.summary;
 document.getElementById('cancerDesc').textContent = DATA.cancerTracking.description;
 document.getElementById('cancerSteps').innerHTML = `
   <div class="step"><div class="s-num">${fmt(cs.target)}</div><div class="s-cap">เป้าหมายทั้งหมด</div></div>
-  <div class="step"><div class="s-num">${fmt(cs.kitsReceived)}</div><div class="s-cap">ได้รับอุปกรณ์ (${(cs.kitsReceived / cs.target * 100).toFixed(1)}%)</div></div>
+  <div class="step"><div class="s-num">${fmt(cs.kitsReceived)}</div><div class="s-cap">ได้รับอุปกรณ์ (${(cs.target > 0 ? cs.kitsReceived / cs.target * 100 : 0).toFixed(1)}%)</div></div>
   <div class="step hl-green"><div class="s-num">${fmt(cs.resultNormal)}</div><div class="s-cap">ผลการตรวจปกติ</div></div>
   <div class="step hl-red"><div class="s-num">${fmt(cs.resultAbnormal)}</div><div class="s-cap">ผลการตรวจผิดปกติ</div></div>
   <div class="step hl-red"><div class="s-num">${fmt(cs.diagnosedReferred)}</div><div class="s-cap">ได้รับการวินิจฉัยและส่งต่อ</div></div>
   <div class="step hl-amber"><div class="s-num">${fmt(cs.pendingResult)}</div><div class="s-cap">รอผล/คงค้าง</div></div>`;
 
 document.getElementById('cancerTbody').innerHTML = DATA.cancerTracking.byFacility.map(r => {
-  const pct = r.kitsReceived / r.target * 100;
+  const pct = r.target > 0 ? r.kitsReceived / r.target * 100 : 0;
   const st = statusOf(pct);
   return `<tr>
     <td class="name">${facilityName(r.facilityId)}</td>

@@ -20,13 +20,23 @@
  *   POST /exec  body: {"action":"feedback", ...}            → บันทึกความคิดเห็นจากแบบฟอร์มบนหน้าเว็บ
  */
 
-const SPREADSHEET_ID = '1KrRIoIP8lq2rx7fieZunC_qUlsplCK6xaSynM9a9VfI';
+const SPREADSHEET_ID = '19Y4ColmVhopSLrIc3ppUr9kvpRpF4tBY4iI5h4aaTX4';
 const CACHE_SECONDS = 600; // cache ผลลัพธ์ 10 นาที ลดโควตาและให้โหลดเร็ว
 
 const THAI_MONTHS = {
   1: 'มกราคม', 2: 'กุมภาพันธ์', 3: 'มีนาคม', 4: 'เมษายน', 5: 'พฤษภาคม', 6: 'มิถุนายน',
   7: 'กรกฎาคม', 8: 'สิงหาคม', 9: 'กันยายน', 10: 'ตุลาคม', 11: 'พฤศจิกายน', 12: 'ธันวาคม'
 };
+
+/**
+ * เรียกหนึ่งครั้งจาก Apps Script editor เพื่ออนุญาตสิทธิ์อ่าน Spreadsheet
+ * ฟังก์ชันนี้ไม่แก้ไขข้อมูลใน workbook
+ */
+function authorizeBackend() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  Logger.log('Backend authorized for spreadsheet: ' + ss.getName());
+  return { spreadsheetId: ss.getId(), spreadsheetName: ss.getName() };
+}
 
 // ตัวชี้วัดที่ใช้คำนวณ % ความก้าวหน้าของแต่ละงาน (ตัวตั้ง/ตัวหาร)
 const PROGRESS_RULE = {
@@ -534,7 +544,11 @@ function readRows_(ss, name) {
 function getHeaders_(ss, name) {
   const sh = ss.getSheetByName(name);
   if (!sh || sh.getLastRow() < 1) return [];
-  return sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0].map(String);
+  const rowCount = Math.min(2, sh.getLastRow());
+  const values = sh.getRange(1, 1, rowCount, sh.getLastColumn()).getValues();
+  const first = values[0].map(String);
+  const second = values.length > 1 ? values[1].map(String) : [];
+  return first.indexOf('year') < 0 && second.indexOf('year') >= 0 ? second : first;
 }
 
 function normalizeContractRow_(r) {
