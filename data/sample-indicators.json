@@ -1,0 +1,190 @@
+{
+  "meta": {
+    "title": "Dashboard ติดตามตัวชี้วัดตามนโยบาย คณะบริหารสาธารณสุขส่วนหน้าประจำอำเภอมายอ กองสาธารณสุข อบจ.ปัตตานี",
+    "district": "มายอ",
+    "province": "ปัตตานี",
+    "fiscalYear": 2569,
+    "asOfMonth": "2569-07",
+    "asOfLabel": "ข้อมูล ณ เดือนกรกฎาคม 2569 (ปีงบประมาณ 2569)",
+    "isMockData": true,
+    "note": "ข้อมูลทั้งหมดเป็นข้อมูลสมมติ (mock data) เพื่อประกอบการนำเสนอขออนุมัติเท่านั้น ไม่มีข้อมูลผู้ป่วยรายบุคคล",
+    "statusThresholds": {
+      "achieved": 80,
+      "watch": 65
+    },
+    "statusLabels": {
+      "achieved": "ถึงเป้า",
+      "watch": "เฝ้าระวัง",
+      "urgent": "ต้องเร่งติดตาม"
+    }
+  },
+  "facilities": [
+    { "id": "F01", "name": "รพ.สต. หน่วยบริการ 01" },
+    { "id": "F02", "name": "รพ.สต. หน่วยบริการ 02" },
+    { "id": "F03", "name": "รพ.สต. หน่วยบริการ 03" },
+    { "id": "F04", "name": "รพ.สต. หน่วยบริการ 04" },
+    { "id": "F05", "name": "รพ.สต. หน่วยบริการ 05" },
+    { "id": "F06", "name": "รพ.สต. หน่วยบริการ 06" },
+    { "id": "F07", "name": "รพ.สต. หน่วยบริการ 07" },
+    { "id": "F08", "name": "รพ.สต. หน่วยบริการ 08" },
+    { "id": "F09", "name": "รพ.สต. หน่วยบริการ 09" },
+    { "id": "F10", "name": "รพ.สต. หน่วยบริการ 10" },
+    { "id": "F11", "name": "รพ.สต. หน่วยบริการ 11" },
+    { "id": "F12", "name": "รพ.สต. หน่วยบริการ 12" },
+    { "id": "F13", "name": "รพ.สต. หน่วยบริการ 13" }
+  ],
+  "programs": [
+    {
+      "id": "ncd",
+      "name": "งานโรคไม่ติดต่อเรื้อรัง (NCDs)",
+      "icon": "🩺",
+      "progressPercent": 69.5,
+      "progressLabel": "ตรวจซ้ำแล้ว 862 จากกลุ่มสงสัยป่วย 1,240 ราย",
+      "metrics": [
+        { "key": "suspected", "label": "กลุ่มสงสัยป่วย", "value": 1240 },
+        { "key": "rescreened", "label": "การตรวจซ้ำ", "value": 862 },
+        { "key": "pending", "label": "คงค้าง", "value": 378 }
+      ]
+    },
+    {
+      "id": "mch",
+      "name": "งานอนามัยแม่และเด็ก",
+      "icon": "🤱",
+      "progressPercent": 84.8,
+      "progressLabel": "ดำเนินการแล้ว 356 จากเป้าหมาย 420 ราย",
+      "metrics": [
+        { "key": "target", "label": "เป้าหมาย", "value": 420 },
+        { "key": "done", "label": "ดำเนินการแล้ว", "value": 356 },
+        { "key": "pending", "label": "คงค้าง", "value": 64 }
+      ]
+    },
+    {
+      "id": "ecd",
+      "name": "งานเด็กปฐมวัย",
+      "icon": "🧒",
+      "progressPercent": 83.5,
+      "progressLabel": "คัดกรองแล้ว 1,544 จากเป้าหมาย 1,850 ราย",
+      "metrics": [
+        { "key": "target", "label": "เป้าหมาย", "value": 1850 },
+        { "key": "screened", "label": "คัดกรอง", "value": 1544 },
+        { "key": "followUp", "label": "ติดตามต่อ", "value": 212 },
+        { "key": "pending", "label": "คงค้าง", "value": 306 }
+      ]
+    },
+    {
+      "id": "vaccine",
+      "name": "งานวัคซีน",
+      "icon": "💉",
+      "progressPercent": 76.9,
+      "progressLabel": "ฉีดตามเกณฑ์ 1,645 จากเป้าหมายเด็ก 0-5 ปี 2,140 ราย",
+      "metrics": [
+        { "key": "target", "label": "เป้าหมายเด็ก 0-5 ปี", "value": 2140 },
+        { "key": "onSchedule", "label": "ฉีดตามเกณฑ์", "value": 1645 },
+        { "key": "delayed", "label": "ล่าช้า", "value": 262 },
+        { "key": "refused", "label": "ปฏิเสธ", "value": 98 },
+        { "key": "unknownPending", "label": "ไม่ทราบสถานะ/คงค้าง", "value": 135 }
+      ]
+    },
+    {
+      "id": "dental",
+      "name": "งานทันตกรรม",
+      "icon": "🦷",
+      "progressPercent": 54.0,
+      "progressLabel": "รับบริการแล้ว 1,728 จากเป้าหมาย 3,200 ราย",
+      "metrics": [
+        { "key": "target", "label": "เป้าหมาย", "value": 3200 },
+        { "key": "served", "label": "รับบริการแล้ว", "value": 1728 },
+        { "key": "pending", "label": "คงค้าง", "value": 1472 }
+      ]
+    },
+    {
+      "id": "elderly",
+      "name": "งานผู้สูงอายุ",
+      "icon": "🧓",
+      "progressPercent": 83.1,
+      "progressLabel": "คัดกรองแล้ว 2,377 จากเป้าหมาย 2,860 ราย",
+      "metrics": [
+        { "key": "target", "label": "เป้าหมาย", "value": 2860 },
+        { "key": "screened", "label": "คัดกรอง", "value": 2377 },
+        { "key": "followUp", "label": "ติดตามต่อ", "value": 401 },
+        { "key": "pending", "label": "คงค้าง", "value": 483 }
+      ]
+    },
+    {
+      "id": "cancer",
+      "name": "งานมะเร็ง",
+      "icon": "🎗️",
+      "progressPercent": 72.8,
+      "progressLabel": "ได้รับอุปกรณ์แล้ว 1,135 จากเป้าหมาย 1,560 ราย",
+      "metrics": [
+        { "key": "target", "label": "เป้าหมายทั้งหมด", "value": 1560 },
+        { "key": "kitsReceived", "label": "ได้รับอุปกรณ์", "value": 1135 },
+        { "key": "resultNormal", "label": "ผลการตรวจปกติ", "value": 812 },
+        { "key": "resultAbnormal", "label": "ผลการตรวจผิดปกติ", "value": 47 },
+        { "key": "diagnosedReferred", "label": "ได้รับการวินิจฉัยและส่งต่อ", "value": 38 },
+        { "key": "pendingResult", "label": "รอผล/คงค้าง", "value": 276 }
+      ]
+    }
+  ],
+  "facilityProgress": [
+    { "facilityId": "F01", "vaccineTarget": 210, "vaccineOnSchedule": 181, "vaccinePercent": 86.2, "cancerTarget": 152, "cancerKits": 125, "cancerPercent": 82.2, "overallPercent": 84.2 },
+    { "facilityId": "F02", "vaccineTarget": 185, "vaccineOnSchedule": 145, "vaccinePercent": 78.4, "cancerTarget": 138, "cancerKits": 102, "cancerPercent": 73.9, "overallPercent": 76.2 },
+    { "facilityId": "F03", "vaccineTarget": 160, "vaccineOnSchedule": 146, "vaccinePercent": 91.3, "cancerTarget": 118, "cancerKits": 101, "cancerPercent": 85.6, "overallPercent": 88.5 },
+    { "facilityId": "F04", "vaccineTarget": 150, "vaccineOnSchedule": 94, "vaccinePercent": 62.7, "cancerTarget": 110, "cancerKits": 64, "cancerPercent": 58.2, "overallPercent": 60.5 },
+    { "facilityId": "F05", "vaccineTarget": 175, "vaccineOnSchedule": 131, "vaccinePercent": 74.9, "cancerTarget": 128, "cancerKits": 90, "cancerPercent": 70.3, "overallPercent": 72.6 },
+    { "facilityId": "F06", "vaccineTarget": 168, "vaccineOnSchedule": 140, "vaccinePercent": 83.3, "cancerTarget": 122, "cancerKits": 97, "cancerPercent": 79.5, "overallPercent": 81.4 },
+    { "facilityId": "F07", "vaccineTarget": 142, "vaccineOnSchedule": 98, "vaccinePercent": 69.0, "cancerTarget": 104, "cancerKits": 69, "cancerPercent": 66.3, "overallPercent": 67.7 },
+    { "facilityId": "F08", "vaccineTarget": 130, "vaccineOnSchedule": 75, "vaccinePercent": 57.7, "cancerTarget": 95, "cancerKits": 50, "cancerPercent": 52.6, "overallPercent": 55.2 },
+    { "facilityId": "F09", "vaccineTarget": 190, "vaccineOnSchedule": 167, "vaccinePercent": 87.9, "cancerTarget": 140, "cancerKits": 118, "cancerPercent": 84.3, "overallPercent": 86.1 },
+    { "facilityId": "F10", "vaccineTarget": 158, "vaccineOnSchedule": 120, "vaccinePercent": 75.9, "cancerTarget": 115, "cancerKits": 83, "cancerPercent": 72.2, "overallPercent": 74.1 },
+    { "facilityId": "F11", "vaccineTarget": 172, "vaccineOnSchedule": 140, "vaccinePercent": 81.4, "cancerTarget": 125, "cancerKits": 97, "cancerPercent": 77.6, "overallPercent": 79.5 },
+    { "facilityId": "F12", "vaccineTarget": 145, "vaccineOnSchedule": 95, "vaccinePercent": 65.5, "cancerTarget": 105, "cancerKits": 65, "cancerPercent": 61.9, "overallPercent": 63.7 },
+    { "facilityId": "F13", "vaccineTarget": 155, "vaccineOnSchedule": 113, "vaccinePercent": 72.9, "cancerTarget": 108, "cancerKits": 74, "cancerPercent": 68.5, "overallPercent": 70.7 }
+  ],
+  "monthlyProgress": {
+    "vaccine": {
+      "targetTotal": 2140,
+      "unit": "ราย (สะสม)",
+      "months": [
+        { "month": "2569-10", "label": "ต.ค. 68", "vaccinatedInMonth": 175, "cumulative": 175, "cumulativePercent": 8.2 },
+        { "month": "2569-11", "label": "พ.ย. 68", "vaccinatedInMonth": 178, "cumulative": 353, "cumulativePercent": 16.5 },
+        { "month": "2569-12", "label": "ธ.ค. 68", "vaccinatedInMonth": 173, "cumulative": 526, "cumulativePercent": 24.6 },
+        { "month": "2569-01", "label": "ม.ค. 69", "vaccinatedInMonth": 167, "cumulative": 693, "cumulativePercent": 32.4 },
+        { "month": "2569-02", "label": "ก.พ. 69", "vaccinatedInMonth": 165, "cumulative": 858, "cumulativePercent": 40.1 },
+        { "month": "2569-03", "label": "มี.ค. 69", "vaccinatedInMonth": 161, "cumulative": 1019, "cumulativePercent": 47.6 },
+        { "month": "2569-04", "label": "เม.ย. 69", "vaccinatedInMonth": 162, "cumulative": 1181, "cumulativePercent": 55.2 },
+        { "month": "2569-05", "label": "พ.ค. 69", "vaccinatedInMonth": 154, "cumulative": 1335, "cumulativePercent": 62.4 },
+        { "month": "2569-06", "label": "มิ.ย. 69", "vaccinatedInMonth": 159, "cumulative": 1494, "cumulativePercent": 69.8 },
+        { "month": "2569-07", "label": "ก.ค. 69", "vaccinatedInMonth": 151, "cumulative": 1645, "cumulativePercent": 76.9 }
+      ]
+    }
+  },
+  "cancerTracking": {
+    "programId": "cancer",
+    "description": "การคัดกรองมะเร็ง (อุปกรณ์เก็บสิ่งส่งตรวจด้วยตนเอง) ปีงบประมาณ 2569",
+    "summary": {
+      "target": 1560,
+      "kitsReceived": 1135,
+      "kitsNotReceived": 425,
+      "resultNormal": 812,
+      "resultAbnormal": 47,
+      "diagnosedReferred": 38,
+      "pendingResult": 276
+    },
+    "byFacility": [
+      { "facilityId": "F01", "target": 152, "kitsReceived": 125, "resultNormal": 92, "resultAbnormal": 5, "diagnosedReferred": 4, "pendingResult": 28 },
+      { "facilityId": "F02", "target": 138, "kitsReceived": 102, "resultNormal": 74, "resultAbnormal": 4, "diagnosedReferred": 3, "pendingResult": 24 },
+      { "facilityId": "F03", "target": 118, "kitsReceived": 101, "resultNormal": 76, "resultAbnormal": 4, "diagnosedReferred": 4, "pendingResult": 21 },
+      { "facilityId": "F04", "target": 110, "kitsReceived": 64, "resultNormal": 44, "resultAbnormal": 3, "diagnosedReferred": 2, "pendingResult": 17 },
+      { "facilityId": "F05", "target": 128, "kitsReceived": 90, "resultNormal": 65, "resultAbnormal": 4, "diagnosedReferred": 3, "pendingResult": 21 },
+      { "facilityId": "F06", "target": 122, "kitsReceived": 97, "resultNormal": 71, "resultAbnormal": 4, "diagnosedReferred": 3, "pendingResult": 22 },
+      { "facilityId": "F07", "target": 104, "kitsReceived": 69, "resultNormal": 48, "resultAbnormal": 3, "diagnosedReferred": 2, "pendingResult": 18 },
+      { "facilityId": "F08", "target": 95, "kitsReceived": 50, "resultNormal": 34, "resultAbnormal": 2, "diagnosedReferred": 2, "pendingResult": 14 },
+      { "facilityId": "F09", "target": 140, "kitsReceived": 118, "resultNormal": 88, "resultAbnormal": 5, "diagnosedReferred": 4, "pendingResult": 25 },
+      { "facilityId": "F10", "target": 115, "kitsReceived": 83, "resultNormal": 60, "resultAbnormal": 3, "diagnosedReferred": 3, "pendingResult": 20 },
+      { "facilityId": "F11", "target": 125, "kitsReceived": 97, "resultNormal": 71, "resultAbnormal": 4, "diagnosedReferred": 3, "pendingResult": 22 },
+      { "facilityId": "F12", "target": 105, "kitsReceived": 65, "resultNormal": 45, "resultAbnormal": 3, "diagnosedReferred": 2, "pendingResult": 17 },
+      { "facilityId": "F13", "target": 108, "kitsReceived": 74, "resultNormal": 44, "resultAbnormal": 3, "diagnosedReferred": 3, "pendingResult": 27 }
+    ]
+  }
+}

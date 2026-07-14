@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard ติดตามตัวชี้วัดตามนโยบาย คณะบริหารสาธารณสุขส่วนหน้าประจำอำเภอมายอ กองสาธารณสุข อบจ.ปัตตานี</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  /* ===== Design Tokens — สไตล์ "e-GP Pipeline" (Warm Cartoon Neubrutalism) ===== */
+  :root {
+    --bg: #F6EFDC;
+    --surface: #FFFDF5;
+    --ink: #1A1A1A;
+    --track: #EFE3C8;
+    --yellow: #FFD43B;
+    --green: #2F9E63;
+    --green-soft: #C9F0D8;
+    --red: #F0544F;
+    --blue: #4D96FF;
+    --purple: #9B7BF0;
+    --note: #FFF3C4;
+    --chip-blue: #DCE9FB;
+    --chip-green: #DFF3E3;
+    --muted: #6b5f4b;
+    --border: 2px solid var(--ink);
+    --border-thick: 3px solid var(--ink);
+    --shadow-sm: 3px 3px 0 var(--ink);
+    --shadow-md: 4px 4px 0 var(--ink);
+    --shadow-lg: 5px 5px 0 var(--ink);
+    --radius-card: 22px;
+    --radius-input: 14px;
+    --radius-pill: 999px;
+    --font-main: 'IBM Plex Sans Thai', 'Noto Sans Thai', 'Sarabun', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-main);
+    background-color: var(--bg);
+    background-image: radial-gradient(#D9CBA8 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+
+  /* ===== Header ===== */
+  .hero { padding: 26px 0 8px; }
+  .app-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .app-logo {
+    width: 46px; height: 46px; border-radius: 50%; background: var(--ink);
+    display: grid; place-items: center; font-size: 22px; flex: none;
+    border: var(--border); box-shadow: var(--shadow-sm);
+  }
+  .app-name { font-size: 1.05rem; font-weight: 700; }
+  .app-name .mono { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); display: block; }
+  .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .hero-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.8rem; font-weight: 600;
+    background: var(--surface); border: var(--border); border-radius: var(--radius-pill);
+    padding: 4px 14px; box-shadow: var(--shadow-sm);
+  }
+  .hero-chip.mock { background: var(--note); }
+  .hero-chip.live { background: var(--green-soft); }
+  .hero h1 { font-size: 1.7rem; font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
+  .hero h1 .hl { background: var(--yellow); padding: 0 8px; border-radius: 8px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .hero p.sub { font-size: 0.98rem; color: var(--ink); max-width: 780px; font-weight: 500; }
+  .hero p.asof { margin-top: 10px; font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: var(--border); border-radius: var(--radius-pill); box-shadow: var(--shadow-sm);
+    font-family: var(--font-main); font-weight: 700; font-size: 0.92rem;
+    padding: 10px 20px; background: var(--surface); color: var(--ink);
+    cursor: pointer; text-decoration: none;
+    transition: transform .08s, box-shadow .08s;
+  }
+  .btn:active { transform: translate(3px, 3px); box-shadow: none; }
+  .btn--primary { background: var(--green); color: #fff; }
+  .btn--soft { background: var(--note); }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+
+  /* ===== KPI cards ===== */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin: 22px 0 30px; }
+  .kpi {
+    background: var(--surface); border: var(--border-thick); border-radius: var(--radius-card);
+    box-shadow: var(--shadow-lg); padding: 16px 18px;
+  }
+  .kpi .tile {
+    width: 44px; height: 44px; display: grid; place-items: center; font-size: 22px;
+    border: var(--border); border-radius: 12px; box-shadow: var(--shadow-sm);
+    transform: rotate(-4deg); margin-bottom: 10px; background: var(--chip-blue);
+  }
+  .kpi.warn .tile { background: var(--red); }
+  .kpi .label { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+  .kpi .value { font-size: 1.9rem; font-weight: 700; line-height: 1.2; }
+  .kpi.warn .value { color: var(--red); }
+  .kpi .hint { font-size: 0.78rem; color: var(--muted); font-weight: 500; }
+
+  /* ===== Sections ===== */
+  section { margin-bottom: 38px; }
+  .sec-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .sec-head .tile {
+    width: 38px; height: 38px; display: grid; place-items: center; font-size: 19px;
+    border: var(--border); border-radius: 11px; box-shadow: var(--shadow-sm);
+    transform: rotate(-4deg); flex: none;
+  }
+  .sec-head h2 { font-size: 1.25rem; font-weight: 700; }
+  .sec-head .desc { font-size: 0.85rem; color: var(--muted); font-weight: 600; width: 100%; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 16px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 700;
+    padding: 3px 12px; border-radius: var(--radius-pill); border: 2px solid var(--ink); white-space: nowrap;
+  }
+  .chip .dot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--ink); }
+  .chip.achieved { background: var(--green-soft); } .chip.achieved .dot { background: var(--green); }
+  .chip.watch { background: var(--note); } .chip.watch .dot { background: var(--yellow); }
+  .chip.urgent { background: var(--red); color: #fff; } .chip.urgent .dot { background: #fff; }
+
+  /* ===== Program cards ===== */
+  .prog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+  .prog-card {
+    background: var(--surface); border: var(--border-thick); border-radius: var(--radius-card);
+    box-shadow: var(--shadow-lg); padding: 18px 20px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: transform .12s;
+  }
+  @media (hover: hover) { .prog-card:hover { transform: translateY(-3px); } }
+  .prog-card .head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .prog-card h3 { font-size: 1rem; font-weight: 700; }
+  .prog-card .pct-row { display: flex; align-items: baseline; gap: 8px; }
+  .prog-card .pct { font-size: 1.6rem; font-weight: 700; }
+  .prog-card .pct-label { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+  .bar {
+    height: 16px; background: var(--track); border: var(--border);
+    border-radius: var(--radius-pill); overflow: hidden;
+  }
+  .bar > span { display: block; height: 100%; border-radius: 0 999px 999px 0; border-right: 2px solid var(--ink); }
+  .bar > span[style*="width:100"] { border-right: none; }
+  .fill-achieved { background: var(--green); } .txt-achieved { color: var(--green); }
+  .fill-watch { background: var(--yellow); } .txt-watch { color: #B45309; }
+  .fill-urgent { background: var(--red); } .txt-urgent { color: var(--red); }
+  .metric-list {
+    display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; font-size: 0.88rem;
+    border-top: 2px dashed #D9CBA8; padding-top: 10px;
+  }
+  .metric-list .m-label { color: var(--muted); font-weight: 600; }
+  .metric-list .m-value { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* ===== Panel / Vaccine chart ===== */
+  .panel {
+    background: var(--surface); border: var(--border-thick); border-radius: var(--radius-card);
+    box-shadow: var(--shadow-lg); padding: 20px;
+  }
+  .vac-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+  .chart-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; }
+  .chart {
+    display: flex; align-items: flex-end; gap: 6px;
+    height: 220px; padding: 0 4px; border-bottom: var(--border-thick);
+  }
+  .chart .col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; min-width: 0; }
+  .chart .col .v { font-size: 0.72rem; font-weight: 700; color: var(--ink); }
+  .chart .col .b {
+    width: 74%; max-width: 42px; background: var(--blue);
+    border: 2px solid var(--ink); border-bottom: none; border-radius: 8px 8px 0 0;
+  }
+  .chart .col:last-child .b { background: var(--green); }
+  .chart-x { display: flex; gap: 6px; padding: 6px 4px 0; }
+  .chart-x .lbl { flex: 1; text-align: center; font-size: 0.7rem; color: var(--muted); font-weight: 600; }
+  .goal-note {
+    margin-top: 12px; font-size: 0.84rem; font-weight: 600;
+    background: var(--note); border: var(--border); border-left: 8px solid var(--yellow);
+    border-radius: var(--radius-input); padding: 10px 14px;
+  }
+  .vac-side { display: flex; flex-direction: column; gap: 10px; }
+  .stat-box {
+    border: var(--border); border-radius: var(--radius-input); padding: 10px 14px;
+    display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+    background: var(--surface); box-shadow: var(--shadow-sm);
+  }
+  .stat-box .s-label { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+  .stat-box .s-value { font-size: 1.15rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .stat-box.good { border-left: 8px solid var(--green); }
+  .stat-box.warn { border-left: 8px solid var(--yellow); }
+  .stat-box.bad { border-left: 8px solid var(--red); }
+  .stat-box.neutral { border-left: 8px solid var(--blue); }
+
+  /* ===== Cancer section ===== */
+  .cancer-steps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-bottom: 18px; }
+  .step {
+    background: var(--surface); border: var(--border); border-radius: 16px;
+    box-shadow: var(--shadow-md); padding: 12px 10px; text-align: center;
+  }
+  .step .s-num { font-size: 1.45rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .step .s-cap { font-size: 0.76rem; color: var(--muted); font-weight: 600; line-height: 1.35; }
+  .step.hl-green { border-top: 8px solid var(--green); } .step.hl-green .s-num { color: var(--green); }
+  .step.hl-amber { border-top: 8px solid var(--yellow); } .step.hl-amber .s-num { color: #B45309; }
+  .step.hl-red { border-top: 8px solid var(--red); } .step.hl-red .s-num { color: var(--red); }
+
+  /* ===== Tables ===== */
+  .table-wrap {
+    background: var(--surface); border: var(--border-thick); border-radius: var(--radius-card);
+    box-shadow: var(--shadow-lg); overflow-x: auto; padding: 6px 14px 10px;
+  }
+  table { width: 100%; border-collapse: collapse; min-width: 720px; }
+  thead th {
+    font-size: 0.83rem; font-weight: 700; color: var(--ink);
+    padding: 12px 10px 8px; text-align: center; white-space: nowrap;
+    border-bottom: var(--border-thick);
+  }
+  thead th:first-child { text-align: left; }
+  tbody td {
+    padding: 9px 10px; font-size: 0.88rem; font-weight: 500;
+    border-bottom: 2px dashed #D9CBA8; text-align: center; font-variant-numeric: tabular-nums;
+  }
+  tbody td.name { text-align: left; font-weight: 700; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  .cell-bar { display: flex; align-items: center; gap: 8px; min-width: 140px; }
+  .cell-bar .bar { flex: 1; height: 12px; box-shadow: none; }
+  .cell-bar .n { width: 48px; text-align: right; font-weight: 700; }
+
+  /* ===== Feedback form ===== */
+  .fb-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 20px; }
+  .fb-field { display: flex; flex-direction: column; gap: 6px; }
+  .fb-field.full { grid-column: 1 / -1; }
+  .fb-field label { font-size: 0.88rem; font-weight: 700; }
+  .fb-field label .req { color: var(--red); }
+  .fb-field label .opt { color: var(--muted); font-weight: 500; font-size: 0.78rem; }
+  .fb-field input, .fb-field select, .fb-field textarea {
+    font-family: var(--font-main); font-size: 0.92rem; font-weight: 500; color: var(--ink);
+    border: var(--border); border-radius: var(--radius-input); padding: 10px 14px;
+    background: var(--surface); outline: none; width: 100%;
+  }
+  .fb-field input:focus, .fb-field select:focus, .fb-field textarea:focus {
+    background: #fff; box-shadow: var(--shadow-sm);
+  }
+  .fb-field input::placeholder, .fb-field textarea::placeholder { color: #9a8f78; font-weight: 400; }
+  .fb-field textarea { min-height: 110px; resize: vertical; }
+  .fb-actions { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .fb-submit {
+    font-family: var(--font-main); font-size: 0.98rem; font-weight: 700; color: #fff;
+    background: var(--green); border: var(--border); border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-sm); padding: 12px 32px; cursor: pointer;
+    transition: transform .08s, box-shadow .08s;
+  }
+  .fb-submit:active { transform: translate(3px, 3px); box-shadow: none; }
+  .fb-submit:disabled { background: #8fbfa4; cursor: wait; }
+  .fb-note { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+  .fb-notice {
+    display: none; margin-top: 16px; padding: 12px 16px;
+    border: var(--border); border-radius: var(--radius-input);
+    font-size: 0.9rem; font-weight: 700;
+  }
+  .fb-notice.show { display: block; }
+  .fb-notice.ok { background: var(--green-soft); border-left: 8px solid var(--green); }
+  .fb-notice.queued { background: var(--note); border-left: 8px solid var(--yellow); }
+  .fb-notice.err { background: #FBD3D1; border-left: 8px solid var(--red); }
+
+  footer {
+    background: var(--ink); color: var(--bg); font-size: 0.83rem; font-weight: 500;
+    padding: 22px 0; margin-top: 30px; border-top: var(--border-thick);
+  }
+  footer .container { text-align: center; }
+  footer strong { color: var(--yellow); }
+
+  @media (max-width: 900px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .vac-layout { grid-template-columns: 1fr; }
+    .cancer-steps { grid-template-columns: repeat(3, 1fr); }
+    .chart { height: 170px; }
+    .chart .col:nth-child(odd) .v { display: none; }
+    .fb-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .hero h1 { font-size: 1.25rem; }
+    .cancer-steps { grid-template-columns: repeat(2, 1fr); }
+    .kpi .value { font-size: 1.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+
+  /* ===== Owner Registration ===== */
+  .owner-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .owner-tab {
+    border: var(--border); border-radius: var(--radius-pill);
+    background: var(--surface); box-shadow: var(--shadow-sm);
+    font-family: var(--font-main); font-weight: 700; font-size: 0.82rem;
+    padding: 7px 14px; cursor: pointer; transition: background .1s, color .1s;
+  }
+  .owner-tab.active { background: var(--ink); color: #fff; box-shadow: none; }
+  .owner-prog-label {
+    font-size: 1.05rem; font-weight: 700; margin-bottom: 16px;
+    padding-bottom: 10px; border-bottom: var(--border-thick);
+  }
+  .owner-persons { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 18px; }
+  .owner-person {
+    border: var(--border-thick); border-radius: var(--radius-card);
+    padding: 16px 18px; background: var(--surface); box-shadow: var(--shadow-md);
+  }
+  .owner-role-badge {
+    display: inline-block; font-size: 0.82rem; font-weight: 700;
+    padding: 4px 14px; border-radius: var(--radius-pill); border: var(--border);
+    margin-bottom: 14px;
+  }
+  .owner-role-badge.head { background: var(--note); }
+  .owner-role-badge.deputy { background: var(--chip-blue); }
+  .owner-fields { display: flex; flex-direction: column; gap: 10px; }
+  .owner-field label { display: block; font-size: 0.84rem; font-weight: 700; margin-bottom: 4px; }
+  .owner-field label .req { color: var(--red); }
+  .owner-field input, .owner-field select {
+    width: 100%; font-family: var(--font-main); font-size: 0.9rem; font-weight: 500;
+    border: var(--border); border-radius: var(--radius-input); padding: 9px 12px;
+    background: var(--surface); color: var(--ink); outline: none;
+  }
+  .owner-field input:focus, .owner-field select:focus { background: #fff; box-shadow: var(--shadow-sm); }
+  .owner-field input::placeholder { color: #9a8f78; font-weight: 400; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <div class="app-row">
+      <div class="app-logo">📊</div>
+      <div class="app-name">Dashboard ติดตามตัวชี้วัดตามนโยบาย
+        <span class="mono">STN Mayo · FY2569</span>
+      </div>
+    </div>
+    <div class="hero-chips">
+      <span class="hero-chip">🏥 คณะบริหารสาธารณสุขส่วนหน้าประจำอำเภอมายอ กองสาธารณสุข อบจ.ปัตตานี</span>
+      <span class="hero-chip">📅 ปีงบประมาณ 2569</span>
+      <span class="hero-chip mock" id="dataBadge">📋 ข้อมูลสมมติเพื่อการนำเสนอ (Prototype)</span>
+    </div>
+    <h1><span class="hl">Dashboard ติดตามตัวชี้วัดตามนโยบาย</span><br>คณะบริหารสาธารณสุขส่วนหน้าประจำอำเภอมายอ กองสาธารณสุข อบจ.ปัตตานี</h1>
+    <p class="sub">ระบบกำกับติดตามความก้าวหน้าตัวชี้วัด 7 งานหลัก ครอบคลุม รพ.สต. ในสังกัด 13 แห่ง
+      สำหรับประธานคณะบริหารสาธารณสุขส่วนหน้าประจำอำเภอมายอ และการนำเสนอในเวทีระดับจังหวัด</p>
+    <p class="asof" id="asOfLabel"></p>
+    <div class="hero-actions">
+      <a class="btn btn--primary" id="slidesLink" href="#" target="_blank" rel="noopener">📽️ เปิดสไลด์นำเสนอ</a>
+      <a class="btn btn--soft" href="#sec-feedback">💬 ร่วมแสดงความคิดเห็น / เสนอข้อมูลที่อยากให้เพิ่ม</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- KPI summary -->
+  <div class="kpi-grid" id="kpiGrid"></div>
+
+  <!-- 7 programs -->
+  <section id="sec-programs">
+    <div class="sec-head">
+      <span class="tile" style="background:var(--green-soft)">📈</span>
+      <h2>ภาพรวมความก้าวหน้า 7 งานหลัก</h2>
+      <span class="desc">เกณฑ์สถานะ: ≥ 80% ถึงเป้า | 65–79.9% เฝ้าระวัง | &lt; 65% ต้องเร่งติดตาม</span>
+    </div>
+    <div class="legend">
+      <span class="chip achieved"><span class="dot"></span>ถึงเป้า</span>
+      <span class="chip watch"><span class="dot"></span>เฝ้าระวัง</span>
+      <span class="chip urgent"><span class="dot"></span>ต้องเร่งติดตาม</span>
+    </div>
+    <div class="prog-grid" id="progGrid"></div>
+  </section>
+
+  <!-- Vaccine -->
+  <section id="sec-vaccine">
+    <div class="sec-head">
+      <span class="tile" style="background:var(--chip-blue)">💉</span>
+      <h2>งานวัคซีน — ความก้าวหน้ารายเดือน (เด็ก 0–5 ปี)</h2>
+      <span class="desc">ความครอบคลุมสะสมเทียบเป้าหมายทั้งปี ปีงบประมาณ 2569</span>
+    </div>
+    <div class="panel">
+      <div class="vac-layout">
+        <div>
+          <div class="chart-title">ความครอบคลุมวัคซีนสะสม (%) รายเดือน ต.ค. 68 – ก.ค. 69</div>
+          <div class="chart" id="vacChart"></div>
+          <div class="chart-x" id="vacChartX"></div>
+          <p class="goal-note" id="vacGoalNote"></p>
+        </div>
+        <div class="vac-side" id="vacSide"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cancer -->
+  <section id="sec-cancer">
+    <div class="sec-head">
+      <span class="tile" style="background:#F8C8C6">🎗️</span>
+      <h2>งานมะเร็ง — การติดตามแบบละเอียด</h2>
+      <span class="desc" id="cancerDesc"></span>
+    </div>
+    <div class="cancer-steps" id="cancerSteps"></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>หน่วยบริการ</th>
+            <th>เป้าหมาย</th>
+            <th>ได้รับอุปกรณ์</th>
+            <th>ผลปกติ</th>
+            <th>ผลผิดปกติ</th>
+            <th>วินิจฉัย/ส่งต่อ</th>
+            <th>รอผล/คงค้าง</th>
+            <th>% ได้รับอุปกรณ์</th>
+          </tr>
+        </thead>
+        <tbody id="cancerTbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Facility table -->
+  <section id="sec-facility">
+    <div class="sec-head">
+      <span class="tile" style="background:var(--note)">🏥</span>
+      <h2>ผลงานราย รพ.สต. 13 แห่ง (วัคซีน / มะเร็ง)</h2>
+      <span class="desc">เรียงตามความก้าวหน้ารวม — ชื่อหน่วยบริการเป็น placeholder รอยืนยันชื่อจริง</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>หน่วยบริการ</th>
+            <th>วัคซีน: เป้าหมาย</th>
+            <th>ฉีดตามเกณฑ์</th>
+            <th>% วัคซีน</th>
+            <th>มะเร็ง: เป้าหมาย</th>
+            <th>ได้รับอุปกรณ์</th>
+            <th>% มะเร็ง</th>
+            <th>ความก้าวหน้ารวม</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody id="facTbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Owner registration -->
+  <section id="sec-owners">
+    <div class="sec-head">
+      <span class="tile" style="background:var(--note)">👤</span>
+      <h2>ข้อมูลผู้รับผิดชอบงานตัวชี้วัด</h2>
+      <span class="desc">กรอกข้อมูลผู้รับผิดชอบแต่ละงาน อย่างน้อย 2 ท่านต่องาน — <strong>หัวหน้างาน</strong> และ <strong>รองหัวหน้าคนที่ 1</strong> — ข้อมูล: ชื่อ-สกุล, ตำแหน่ง, รพ.สต. ที่ปฏิบัติงาน, เบอร์โทรติดต่อ</span>
+    </div>
+    <div class="panel">
+      <div class="owner-tabs" id="ownerTabs"></div>
+      <form id="ownerForm" novalidate>
+        <div class="owner-prog-label" id="ownerProgLabel"></div>
+        <div class="owner-persons" id="ownerPersons"></div>
+        <div class="fb-actions">
+          <button type="submit" class="fb-submit" id="ownerSubmit">💾 บันทึกข้อมูลผู้รับผิดชอบ</button>
+          <span class="fb-note">เลือกแท็บงานด้านบน → กรอกข้อมูล → กดบันทึก (ทำทีละงาน) — บันทึกเข้า Google Sheets อัตโนมัติ</span>
+        </div>
+      </form>
+      <div class="fb-notice" id="ownerNotice"></div>
+    </div>
+  </section>
+
+  <!-- Feedback form -->
+  <section id="sec-feedback">
+    <div class="sec-head">
+      <span class="tile" style="background:var(--chip-blue)">💬</span>
+      <h2>แบบฟอร์มรับฟังความคิดเห็น</h2>
+      <span class="desc">สำหรับผู้เข้าร่วมประชุม — เสนอข้อมูลที่อยากให้เพิ่ม ปัญหาการใช้งาน หรือรูปแบบการแสดงผล เพื่อพัฒนา dashboard ให้ตรงกับการใช้งานจริง</span>
+    </div>
+    <div class="panel">
+      <form id="fbForm" class="fb-grid" novalidate>
+        <div class="fb-field">
+          <label for="fbName">ชื่อ-สกุล <span class="opt">(ไม่บังคับ)</span></label>
+          <input type="text" id="fbName" name="name" maxlength="200" placeholder="เช่น นายสมชาย ใจดี">
+        </div>
+        <div class="fb-field">
+          <label for="fbOrg">หน่วยงาน <span class="req">*</span></label>
+          <select id="fbOrg" name="organization" required>
+            <option value="">— เลือกหน่วยงาน —</option>
+            <option value="คณะบริหารสาธารณสุขส่วนหน้าประจำอำเภอมายอ กองสาธารณสุข อบจ.ปัตตานี">คณะบริหารสาธารณสุขส่วนหน้าประจำอำเภอมายอ กองสาธารณสุข อบจ.ปัตตานี</option>
+            <option value="สสอ.มายอ">สสอ.มายอ</option>
+            <option value="อื่น ๆ">อื่น ๆ</option>
+          </select>
+        </div>
+        <div class="fb-field">
+          <label for="fbRole">บทบาท <span class="req">*</span></label>
+          <select id="fbRole" name="role" required>
+            <option value="">— เลือกบทบาท —</option>
+            <option>ผู้บริหาร</option>
+            <option>ผู้รับผิดชอบงาน (Program Owner)</option>
+            <option>เจ้าหน้าที่ รพ.สต.</option>
+            <option>ผู้เข้าร่วมประชุม/อื่น ๆ</option>
+          </select>
+        </div>
+        <div class="fb-field">
+          <label for="fbSection">ส่วนของ dashboard ที่ให้ความเห็น <span class="req">*</span></label>
+          <select id="fbSection" name="section" required>
+            <option value="">— เลือกส่วน —</option>
+            <option>ภาพรวม/KPI ด้านบน</option>
+            <option>การ์ดสรุป 7 งาน</option>
+            <option>งานวัคซีน (กราฟรายเดือน)</option>
+            <option>งานมะเร็ง (ตารางละเอียด)</option>
+            <option>ตารางราย รพ.สต.</option>
+            <option>ทั้งหน้า/อื่น ๆ</option>
+          </select>
+        </div>
+        <div class="fb-field">
+          <label for="fbType">ประเภทความคิดเห็น <span class="req">*</span></label>
+          <select id="fbType" name="type" required>
+            <option value="">— เลือกประเภท —</option>
+            <option>ข้อมูล/ตัวชี้วัดที่อยากให้เพิ่ม</option>
+            <option>ปัญหาการใช้งาน (Pain Point)</option>
+            <option>รูปแบบการแสดงผล/ความสวยงาม</option>
+            <option>ความถูกต้องของข้อมูล</option>
+            <option>อื่น ๆ</option>
+          </select>
+        </div>
+        <div class="fb-field">
+          <label for="fbPriority">ระดับความสำคัญ</label>
+          <select id="fbPriority" name="priority">
+            <option>ปานกลาง</option>
+            <option>สูง (อยากให้ทำก่อน)</option>
+            <option>ต่ำ (ไว้ทีหลังได้)</option>
+          </select>
+        </div>
+        <div class="fb-field full">
+          <label for="fbMessage">รายละเอียด <span class="req">*</span></label>
+          <textarea id="fbMessage" name="message" maxlength="3000" required
+            placeholder="เช่น อยากให้เพิ่มข้อมูล... / ส่วนนี้ใช้งานยากเพราะ... / ตัวเลขนี้อยากให้แสดงเป็น..."></textarea>
+        </div>
+        <div class="fb-actions">
+          <button type="submit" class="fb-submit" id="fbSubmit">↑ ส่งความคิดเห็น</button>
+          <span class="fb-note">ข้อมูลจะถูกรวบรวมเข้า Google Sheets เพื่อสรุปเป็นแผนพัฒนาระยะถัดไป — ไม่ต้องล็อกอิน</span>
+        </div>
+      </form>
+      <div class="fb-notice" id="fbNotice"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p><strong>หมายเหตุ:</strong> ตัวเลขที่แสดงระหว่างช่วง Prototype เป็น <strong>ข้อมูลสมมติ (Mock Data)</strong>
+      จัดทำเพื่อประกอบการประชุมพิจารณาอนุมัติพัฒนาระบบเท่านั้น ไม่มีข้อมูลผู้ป่วยรายบุคคล</p>
+    <p>Prototype — เชื่อมต่อ Google Sheets + Google Apps Script API แล้ว</p>
+  </div>
+</footer>
+
+<script>
+/* =========================================================================
+   การเชื่อมต่อข้อมูลจริง (Google Apps Script API)
+   - หน้าเว็บจะแสดง mock data ที่ฝังไว้ทันที (เปิดแบบ double-click ได้เสมอ)
+   - จากนั้นลองดึงข้อมูลจริงจาก GAS_URL ถ้าสำเร็จจะ render ทับและเปลี่ยน badge
+   - โค้ดฝั่ง GAS อยู่ที่ gas/Code.gs
+   ========================================================================= */
+const CONFIG = {
+  GAS_URL: 'https://script.google.com/macros/s/AKfycbyzVA3QA2y6BWluUgZ9b4_Xd9lu7hXTnKWfEdBYuHenJWEf906fFoTJLwiwIPMhBO-Ajg/exec',
+  year: 2569,
+  month: '07',
+  useLiveData: true // ตั้งเป็น false ถ้าต้องการใช้ mock data อย่างเดียว (เช่น เดโมออฟไลน์)
+};
+
+/* ข้อมูลสำรอง (mock) ชุดเดียวกับ data/sample-indicators.json */
+const MOCK_DATA = {
+  meta: {
+    asOfLabel: "ข้อมูล ณ เดือนกรกฎาคม 2569 (ปีงบประมาณ 2569) — อัปเดตล่าสุด: 3 ก.ค. 2569",
+    statusThresholds: { achieved: 80, watch: 65 },
+    statusLabels: { achieved: "ถึงเป้า", watch: "เฝ้าระวัง", urgent: "ต้องเร่งติดตาม" }
+  },
+  facilities: [
+    { id: "F01", name: "09940:โรงพยาบาลส่งเสริมสุขภาพตำบลถนน" },
+    { id: "F02", name: "09941:โรงพยาบาลส่งเสริมสุขภาพตำบลตรัง" },
+    { id: "F03", name: "09942:โรงพยาบาลส่งเสริมสุขภาพตำบลกระหวะ" },
+    { id: "F04", name: "09943:โรงพยาบาลส่งเสริมสุขภาพตำบลลุโบะยิไร" },
+    { id: "F05", name: "09944:โรงพยาบาลส่งเสริมสุขภาพตำบลลางา" },
+    { id: "F06", name: "09945:โรงพยาบาลส่งเสริมสุขภาพตำบลกระเสาะ" },
+    { id: "F07", name: "09946:โรงพยาบาลส่งเสริมสุขภาพตำบลเกาะจัน" },
+    { id: "F08", name: "09947:โรงพยาบาลส่งเสริมสุขภาพตำบลปะโด" },
+    { id: "F09", name: "09948:โรงพยาบาลส่งเสริมสุขภาพตำบลสาคอบน" },
+    { id: "F10", name: "09949:โรงพยาบาลส่งเสริมสุขภาพตำบลสาคอใต้" },
+    { id: "F11", name: "09950:โรงพยาบาลส่งเสริมสุขภาพตำบลสะกำ" },
+    { id: "F12", name: "09951:โรงพยาบาลส่งเสริมสุขภาพตำบลปานัน" },
+    { id: "F13", name: "41083:โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านน้ำใส" }
+  ],
+  programs: [
+    { id: "ncd", name: "งานโรคไม่ติดต่อเรื้อรัง (NCDs)", icon: "🩺", progressPercent: 69.5,
+      metrics: [
+        { label: "กลุ่มสงสัยป่วย", value: 1240 },
+        { label: "การตรวจซ้ำ", value: 862 },
+        { label: "คงค้าง", value: 378 }
+      ] },
+    { id: "mch", name: "งานอนามัยแม่และเด็ก", icon: "🤱", progressPercent: 84.8,
+      metrics: [
+        { label: "เป้าหมาย", value: 420 },
+        { label: "ดำเนินการแล้ว", value: 356 },
+        { label: "คงค้าง", value: 64 }
+      ] },
+    { id: "ecd", name: "งานเด็กปฐมวัย", icon: "🧒", progressPercent: 83.5,
+      metrics: [
+        { label: "เป้าหมาย", value: 1850 },
+        { label: "คัดกรอง", value: 1544 },
+        { label: "ติดตามต่อ", value: 212 },
+        { label: "คงค้าง", value: 306 }
+      ] },
+    { id: "vaccine", name: "งานวัคซีน", icon: "💉", progressPercent: 76.9,
+      metrics: [
+        { label: "เป้าหมายเด็ก 0-5 ปี", value: 2140 },
+        { label: "ฉีดตามเกณฑ์", value: 1645 },
+        { label: "ล่าช้า", value: 262 },
+        { label: "ปฏิเสธ", value: 98 },
+        { label: "ไม่ทราบสถานะ/คงค้าง", value: 135 }
+      ] },
+    { id: "dental", name: "งานทันตกรรม", icon: "🦷", progressPercent: 54.0,
+      metrics: [
+        { label: "เป้าหมาย", value: 3200 },
+        { label: "รับบริการแล้ว", value: 1728 },
+        { label: "คงค้าง", value: 1472 }
+      ] },
+    { id: "elderly", name: "งานผู้สูงอายุ", icon: "🧓", progressPercent: 83.1,
+      metrics: [
+        { label: "เป้าหมาย", value: 2860 },
+        { label: "คัดกรอง", value: 2377 },
+        { label: "ติดตามต่อ", value: 401 },
+        { label: "คงค้าง", value: 483 }
+      ] },
+    { id: "cancer", name: "งานมะเร็ง", icon: "🎗️", progressPercent: 72.8,
+      metrics: [
+        { label: "เป้าหมายทั้งหมด", value: 1560 },
+        { label: "ได้รับอุปกรณ์", value: 1135 },
+        { label: "ผลการตรวจปกติ", value: 812 },
+        { label: "ผลการตรวจผิดปกติ", value: 47 },
+        { label: "ได้รับการวินิจฉัยและส่งต่อ", value: 38 },
+        { label: "รอผล/คงค้าง", value: 276 }
+      ] }
+  ],
+  facilityProgress: [
+    { facilityId: "F01", vaccineTarget: 210, vaccineOnSchedule: 181, vaccinePercent: 86.2, cancerTarget: 152, cancerKits: 125, cancerPercent: 82.2, overallPercent: 84.2 },
+    { facilityId: "F02", vaccineTarget: 185, vaccineOnSchedule: 145, vaccinePercent: 78.4, cancerTarget: 138, cancerKits: 102, cancerPercent: 73.9, overallPercent: 76.2 },
+    { facilityId: "F03", vaccineTarget: 160, vaccineOnSchedule: 146, vaccinePercent: 91.3, cancerTarget: 118, cancerKits: 101, cancerPercent: 85.6, overallPercent: 88.5 },
+    { facilityId: "F04", vaccineTarget: 150, vaccineOnSchedule: 94, vaccinePercent: 62.7, cancerTarget: 110, cancerKits: 64, cancerPercent: 58.2, overallPercent: 60.5 },
+    { facilityId: "F05", vaccineTarget: 175, vaccineOnSchedule: 131, vaccinePercent: 74.9, cancerTarget: 128, cancerKits: 90, cancerPercent: 70.3, overallPercent: 72.6 },
+    { facilityId: "F06", vaccineTarget: 168, vaccineOnSchedule: 140, vaccinePercent: 83.3, cancerTarget: 122, cancerKits: 97, cancerPercent: 79.5, overallPercent: 81.4 },
+    { facilityId: "F07", vaccineTarget: 142, vaccineOnSchedule: 98, vaccinePercent: 69.0, cancerTarget: 104, cancerKits: 69, cancerPercent: 66.3, overallPercent: 67.7 },
+    { facilityId: "F08", vaccineTarget: 130, vaccineOnSchedule: 75, vaccinePercent: 57.7, cancerTarget: 95, cancerKits: 50, cancerPercent: 52.6, overallPercent: 55.2 },
+    { facilityId: "F09", vaccineTarget: 190, vaccineOnSchedule: 167, vaccinePercent: 87.9, cancerTarget: 140, cancerKits: 118, cancerPercent: 84.3, overallPercent: 86.1 },
+    { facilityId: "F10", vaccineTarget: 158, vaccineOnSchedule: 120, vaccinePercent: 75.9, cancerTarget: 115, cancerKits: 83, cancerPercent: 72.2, overallPercent: 74.1 },
+    { facilityId: "F11", vaccineTarget: 172, vaccineOnSchedule: 140, vaccinePercent: 81.4, cancerTarget: 125, cancerKits: 97, cancerPercent: 77.6, overallPercent: 79.5 },
+    { facilityId: "F12", vaccineTarget: 145, vaccineOnSchedule: 95, vaccinePercent: 65.5, cancerTarget: 105, cancerKits: 65, cancerPercent: 61.9, overallPercent: 63.7 },
+    { facilityId: "F13", vaccineTarget: 155, vaccineOnSchedule: 113, vaccinePercent: 72.9, cancerTarget: 108, cancerKits: 74, cancerPercent: 68.5, overallPercent: 70.7 }
+  ],
+  monthlyProgress: {
+    vaccine: {
+      targetTotal: 2140,
+      months: [
+        { label: "ต.ค. 68", vaccinatedInMonth: 175, cumulative: 175, cumulativePercent: 8.2 },
+        { label: "พ.ย. 68", vaccinatedInMonth: 178, cumulative: 353, cumulativePercent: 16.5 },
+        { label: "ธ.ค. 68", vaccinatedInMonth: 173, cumulative: 526, cumulativePercent: 24.6 },
+        { label: "ม.ค. 69", vaccinatedInMonth: 167, cumulative: 693, cumulativePercent: 32.4 },
+        { label: "ก.พ. 69", vaccinatedInMonth: 165, cumulative: 858, cumulativePercent: 40.1 },
+        { label: "มี.ค. 69", vaccinatedInMonth: 161, cumulative: 1019, cumulativePercent: 47.6 },
+        { label: "เม.ย. 69", vaccinatedInMonth: 162, cumulative: 1181, cumulativePercent: 55.2 },
+        { label: "พ.ค. 69", vaccinatedInMonth: 154, cumulative: 1335, cumulativePercent: 62.4 },
+        { label: "มิ.ย. 69", vaccinatedInMonth: 159, cumulative: 1494, cumulativePercent: 69.8 },
+        { label: "ก.ค. 69", vaccinatedInMonth: 151, cumulative: 1645, cumulativePercent: 76.9 }
+      ]
+    }
+  },
+  cancerTracking: {
+    description: "การคัดกรองมะเร็ง (อุปกรณ์เก็บสิ่งส่งตรวจด้วยตนเอง) ปีงบประมาณ 2569",
+    summary: { target: 1560, kitsReceived: 1135, kitsNotReceived: 425, resultNormal: 812, resultAbnormal: 47, diagnosedReferred: 38, pendingResult: 276 },
+    byFacility: [
+      { facilityId: "F01", target: 152, kitsReceived: 125, resultNormal: 92, resultAbnormal: 5, diagnosedReferred: 4, pendingResult: 28 },
+      { facilityId: "F02", target: 138, kitsReceived: 102, resultNormal: 74, resultAbnormal: 4, diagnosedReferred: 3, pendingResult: 24 },
+      { facilityId: "F03", target: 118, kitsReceived: 101, resultNormal: 76, resultAbnormal: 4, diagnosedReferred: 4, pendingResult: 21 },
+      { facilityId: "F04", target: 110, kitsReceived: 64, resultNormal: 44, resultAbnormal: 3, diagnosedReferred: 2, pendingResult: 17 },
+      { facilityId: "F05", target: 128, kitsReceived: 90, resultNormal: 65, resultAbnormal: 4, diagnosedReferred: 3, pendingResult: 21 },
+      { facilityId: "F06", target: 122, kitsReceived: 97, resultNormal: 71, resultAbnormal: 4, diagnosedReferred: 3, pendingResult: 22 },
+      { facilityId: "F07", target: 104, kitsReceived: 69, resultNormal: 48, resultAbnormal: 3, diagnosedReferred: 2, pendingResult: 18 },
+      { facilityId: "F08", target: 95, kitsReceived: 50, resultNormal: 34, resultAbnormal: 2, diagnosedReferred: 2, pendingResult: 14 },
+      { facilityId: "F09", target: 140, kitsReceived: 118, resultNormal: 88, resultAbnormal: 5, diagnosedReferred: 4, pendingResult: 25 },
+      { facilityId: "F10", target: 115, kitsReceived: 83, resultNormal: 60, resultAbnormal: 3, diagnosedReferred: 3, pendingResult: 20 },
+      { facilityId: "F11", target: 125, kitsReceived: 97, resultNormal: 71, resultAbnormal: 4, diagnosedReferred: 3, pendingResult: 22 },
+      { facilityId: "F12", target: 105, kitsReceived: 65, resultNormal: 45, resultAbnormal: 3, diagnosedReferred: 2, pendingResult: 17 },
+      { facilityId: "F13", target: 108, kitsReceived: 74, resultNormal: 44, resultAbnormal: 3, diagnosedReferred: 3, pendingResult: 27 }
+    ]
+  }
+};
+
+/* ---------- render ทั้งหน้า (เรียกซ้ำได้เมื่อข้อมูลจริงมาถึง) ---------- */
+function renderDashboard(DATA) {
+
+/* ---------- helpers ---------- */
+const fmt = n => n.toLocaleString('th-TH');
+const T = DATA.meta.statusThresholds;
+const L = DATA.meta.statusLabels;
+function statusOf(pct) {
+  if (pct >= T.achieved) return 'achieved';
+  if (pct >= T.watch) return 'watch';
+  return 'urgent';
+}
+const facilityName = id => DATA.facilities.find(f => f.id === id)?.name || id;
+
+/* ---------- hero / KPI ---------- */
+document.getElementById('asOfLabel').textContent = DATA.meta.asOfLabel;
+
+const avgProgress = DATA.programs.reduce((s, p) => s + p.progressPercent, 0) / DATA.programs.length;
+const urgentPrograms = DATA.programs.filter(p => statusOf(p.progressPercent) === 'urgent');
+const achievedPrograms = DATA.programs.filter(p => statusOf(p.progressPercent) === 'achieved');
+
+document.getElementById('kpiGrid').innerHTML = `
+  <div class="kpi">
+    <div class="tile">📌</div>
+    <div class="label">งานตัวชี้วัดที่ติดตาม</div>
+    <div class="value">${DATA.programs.length} งาน</div>
+    <div class="hint">ถึงเป้าแล้ว ${achievedPrograms.length} งาน</div>
+  </div>
+  <div class="kpi">
+    <div class="tile" style="background:var(--chip-green)">🏥</div>
+    <div class="label">หน่วยบริการในสังกัด</div>
+    <div class="value">${DATA.facilities.length} รพ.สต.</div>
+    <div class="hint">ครอบคลุมทั้งอำเภอมายอ</div>
+  </div>
+  <div class="kpi">
+    <div class="tile" style="background:#E4DBFA">📊</div>
+    <div class="label">ความก้าวหน้าเฉลี่ยทุกงาน</div>
+    <div class="value">${avgProgress.toFixed(1)}%</div>
+    <div class="hint">เทียบเป้าหมายปีงบประมาณ 2569</div>
+  </div>
+  <div class="kpi warn">
+    <div class="tile">🚨</div>
+    <div class="label">งานที่ต้องเร่งติดตาม</div>
+    <div class="value">${urgentPrograms.length} งาน</div>
+    <div class="hint">${urgentPrograms.map(p => p.name).join(', ') || '—'}</div>
+  </div>`;
+
+/* ---------- program cards ---------- */
+document.getElementById('progGrid').innerHTML = DATA.programs.map(p => {
+  const st = statusOf(p.progressPercent);
+  return `
+  <div class="prog-card">
+    <div class="head">
+      <h3>${p.icon} ${p.name}</h3>
+      <span class="chip ${st}"><span class="dot"></span>${L[st]}</span>
+    </div>
+    <div class="pct-row">
+      <span class="pct txt-${st}">${p.progressPercent.toFixed(1)}%</span>
+      <span class="pct-label">ความก้าวหน้า</span>
+    </div>
+    <div class="bar"><span class="fill-${st}" style="width:${Math.min(p.progressPercent, 100)}%"></span></div>
+    <div class="metric-list">
+      ${p.metrics.map(m => `<span class="m-label">${m.label}</span><span class="m-value">${fmt(m.value)}</span>`).join('')}
+    </div>
+  </div>`;
+}).join('');
+
+/* ---------- vaccine chart ---------- */
+const vac = DATA.monthlyProgress.vaccine;
+const maxPct = 100;
+document.getElementById('vacChart').innerHTML = vac.months.map(m => `
+  <div class="col" title="${m.label}: สะสม ${fmt(m.cumulative)} ราย (${m.cumulativePercent}%)">
+    <span class="v">${m.cumulativePercent.toFixed(0)}%</span>
+    <span class="b" style="height:${(m.cumulativePercent / maxPct) * 100}%"></span>
+  </div>`).join('');
+document.getElementById('vacChartX').innerHTML =
+  vac.months.map(m => `<span class="lbl">${m.label}</span>`).join('');
+
+const lastM = vac.months[vac.months.length - 1];
+const prevM = vac.months[vac.months.length - 2];
+document.getElementById('vacGoalNote').textContent =
+  `เดือนล่าสุด (${lastM.label}) ฉีดเพิ่ม ${fmt(lastM.vaccinatedInMonth)} ราย รวมสะสม ${fmt(lastM.cumulative)} จากเป้าหมาย ${fmt(vac.targetTotal)} ราย ` +
+  `(+${(lastM.cumulativePercent - prevM.cumulativePercent).toFixed(1)} จุดจากเดือนก่อน) — แนวโน้มเพิ่มขึ้นต่อเนื่องทุกเดือน`;
+
+const vp = DATA.programs.find(p => p.id === 'vaccine');
+const vm = Object.fromEntries(vp.metrics.map(m => [m.label, m.value]));
+document.getElementById('vacSide').innerHTML = `
+  <div class="stat-box neutral"><span class="s-label">เป้าหมายเด็ก 0-5 ปี</span><span class="s-value">${fmt(vm['เป้าหมายเด็ก 0-5 ปี'])}</span></div>
+  <div class="stat-box good"><span class="s-label">ฉีดตามเกณฑ์</span><span class="s-value">${fmt(vm['ฉีดตามเกณฑ์'])}</span></div>
+  <div class="stat-box warn"><span class="s-label">ล่าช้า</span><span class="s-value">${fmt(vm['ล่าช้า'])}</span></div>
+  <div class="stat-box bad"><span class="s-label">ปฏิเสธ</span><span class="s-value">${fmt(vm['ปฏิเสธ'])}</span></div>
+  <div class="stat-box bad"><span class="s-label">ไม่ทราบสถานะ/คงค้าง</span><span class="s-value">${fmt(vm['ไม่ทราบสถานะ/คงค้าง'])}</span></div>`;
+
+/* ---------- cancer section ---------- */
+const cs = DATA.cancerTracking.summary;
+document.getElementById('cancerDesc').textContent = DATA.cancerTracking.description;
+document.getElementById('cancerSteps').innerHTML = `
+  <div class="step"><div class="s-num">${fmt(cs.target)}</div><div class="s-cap">เป้าหมายทั้งหมด</div></div>
+  <div class="step"><div class="s-num">${fmt(cs.kitsReceived)}</div><div class="s-cap">ได้รับอุปกรณ์ (${(cs.kitsReceived / cs.target * 100).toFixed(1)}%)</div></div>
+  <div class="step hl-green"><div class="s-num">${fmt(cs.resultNormal)}</div><div class="s-cap">ผลการตรวจปกติ</div></div>
+  <div class="step hl-red"><div class="s-num">${fmt(cs.resultAbnormal)}</div><div class="s-cap">ผลการตรวจผิดปกติ</div></div>
+  <div class="step hl-red"><div class="s-num">${fmt(cs.diagnosedReferred)}</div><div class="s-cap">ได้รับการวินิจฉัยและส่งต่อ</div></div>
+  <div class="step hl-amber"><div class="s-num">${fmt(cs.pendingResult)}</div><div class="s-cap">รอผล/คงค้าง</div></div>`;
+
+document.getElementById('cancerTbody').innerHTML = DATA.cancerTracking.byFacility.map(r => {
+  const pct = r.kitsReceived / r.target * 100;
+  const st = statusOf(pct);
+  return `<tr>
+    <td class="name">${facilityName(r.facilityId)}</td>
+    <td>${fmt(r.target)}</td>
+    <td>${fmt(r.kitsReceived)}</td>
+    <td>${fmt(r.resultNormal)}</td>
+    <td>${fmt(r.resultAbnormal)}</td>
+    <td>${fmt(r.diagnosedReferred)}</td>
+    <td>${fmt(r.pendingResult)}</td>
+    <td><div class="cell-bar"><div class="bar"><span class="fill-${st}" style="width:${pct}%"></span></div><span class="n txt-${st}">${pct.toFixed(1)}%</span></div></td>
+  </tr>`;
+}).join('');
+
+/* ---------- facility table ---------- */
+const facRows = [...DATA.facilityProgress].sort((a, b) => b.overallPercent - a.overallPercent);
+document.getElementById('facTbody').innerHTML = facRows.map(r => {
+  const st = statusOf(r.overallPercent);
+  return `<tr>
+    <td class="name">${facilityName(r.facilityId)}</td>
+    <td>${fmt(r.vaccineTarget)}</td>
+    <td>${fmt(r.vaccineOnSchedule)}</td>
+    <td class="txt-${statusOf(r.vaccinePercent)}"><strong>${r.vaccinePercent.toFixed(1)}%</strong></td>
+    <td>${fmt(r.cancerTarget)}</td>
+    <td>${fmt(r.cancerKits)}</td>
+    <td class="txt-${statusOf(r.cancerPercent)}"><strong>${r.cancerPercent.toFixed(1)}%</strong></td>
+    <td><div class="cell-bar"><div class="bar"><span class="fill-${st}" style="width:${r.overallPercent}%"></span></div><span class="n">${r.overallPercent.toFixed(1)}%</span></div></td>
+    <td><span class="chip ${st}"><span class="dot"></span>${L[st]}</span></td>
+  </tr>`;
+}).join('');
+
+} /* end renderDashboard */
+
+/* ---------- boot: แสดง mock ทันที แล้วลองดึงข้อมูลจริงจาก GAS ---------- */
+renderDashboard(MOCK_DATA);
+
+if (CONFIG.useLiveData && CONFIG.GAS_URL) {
+  fetch(`${CONFIG.GAS_URL}?action=all&year=${CONFIG.year}&month=${CONFIG.month}`)
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(live => {
+      if (live.error) throw new Error(live.error);
+      if (!live.programs || !live.facilities || !live.meta) throw new Error('รูปแบบข้อมูลไม่ตรงตามที่คาดไว้');
+      renderDashboard(live);
+      globalFacilities = live.facilities;
+      ownerRenderPersons();
+      const badge = document.getElementById('dataBadge');
+      badge.textContent = '🔗 ข้อมูลจริงจาก Google Sheets';
+      badge.classList.remove('mock');
+      badge.classList.add('live');
+    })
+    .catch(err => {
+      console.warn('เชื่อมต่อ GAS ไม่สำเร็จ — แสดงข้อมูลสมมติแทน:', err.message);
+    });
+}
+
+/* ---------- แบบฟอร์มรับฟังความคิดเห็น ---------- */
+/* เติมรายชื่อ รพ.สต. ใน dropdown หน่วยงาน (แทรกก่อนตัวเลือก "อื่น ๆ") */
+(function () {
+  const sel = document.getElementById('fbOrg');
+  const other = sel.querySelector('option[value="อื่น ๆ"]');
+  MOCK_DATA.facilities.forEach(f => {
+    const opt = document.createElement('option');
+    opt.value = opt.textContent = f.name;
+    sel.insertBefore(opt, other);
+  });
+})();
+
+const FB_QUEUE_KEY = 'mayo-dashboard-feedback-queue';
+
+function fbShowNotice(kind, text) {
+  const el = document.getElementById('fbNotice');
+  el.className = 'fb-notice show ' + kind;
+  el.textContent = text;
+}
+
+function fbSend(payload) {
+  // POST แบบ text/plain (simple request) เพื่อเลี่ยง CORS preflight ซึ่ง GAS ไม่รองรับ
+  return fetch(CONFIG.GAS_URL, { method: 'POST', body: JSON.stringify(payload) })
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(res => { if (res.error) throw new Error(res.error); return res; });
+}
+
+function fbQueue() {
+  try { return JSON.parse(localStorage.getItem(FB_QUEUE_KEY)) || []; }
+  catch (e) { return []; }
+}
+
+function fbFlushQueue() {
+  const queue = fbQueue();
+  if (!queue.length) return;
+  fbSend(queue[0]).then(() => {
+    localStorage.setItem(FB_QUEUE_KEY, JSON.stringify(queue.slice(1)));
+    fbShowNotice('ok', `ส่งความคิดเห็นที่ค้างอยู่สำเร็จ (เหลืออีก ${queue.length - 1} รายการ)`);
+    fbFlushQueue();
+  }).catch(() => {/* ยังส่งไม่ได้ ไว้ลองใหม่รอบหน้า */});
+}
+
+document.getElementById('fbForm').addEventListener('submit', function (ev) {
+  ev.preventDefault();
+  const form = ev.target;
+  if (!form.reportValidity()) return;
+
+  const payload = {
+    action: 'feedback',
+    name: form.name.value.trim(),
+    organization: form.organization.value,
+    role: form.role.value,
+    section: form.section.value,
+    type: form.type.value,
+    priority: form.priority.value,
+    message: form.message.value.trim(),
+    clientSavedAt: new Date().toISOString()
+  };
+  if (!payload.message) { fbShowNotice('err', 'กรุณากรอกรายละเอียดความคิดเห็น'); return; }
+
+  const btn = document.getElementById('fbSubmit');
+  btn.disabled = true;
+  btn.textContent = 'กำลังส่ง...';
+
+  fbSend(payload)
+    .then(() => {
+      form.reset();
+      fbShowNotice('ok', '✅ ส่งความคิดเห็นเรียบร้อย ขอบคุณสำหรับข้อเสนอแนะ');
+    })
+    .catch(err => {
+      // ส่งไม่สำเร็จ (ออฟไลน์/ระบบยังไม่พร้อม) — เก็บไว้ในเครื่อง แล้วส่งใหม่อัตโนมัติเมื่อเปิดหน้านี้ครั้งถัดไป
+      const queue = fbQueue();
+      queue.push(payload);
+      localStorage.setItem(FB_QUEUE_KEY, JSON.stringify(queue));
+      form.reset();
+      fbShowNotice('queued',
+        `📥 ยังส่งเข้าระบบไม่ได้ (${err.message}) — บันทึกไว้ในเครื่องแล้ว ${queue.length} รายการ ` +
+        'ระบบจะส่งให้อัตโนมัติเมื่อเปิดหน้านี้อีกครั้งตอนออนไลน์');
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.textContent = '↑ ส่งความคิดเห็น';
+    });
+});
+
+fbFlushQueue(); // ลองส่งรายการที่ค้างจากครั้งก่อน
+
+/* hash link ใช้ไม่ได้ใน iframe ของ Apps Script — เลื่อนด้วย JS แทน */
+document.querySelector('a[href="#sec-feedback"]').addEventListener('click', ev => {
+  ev.preventDefault();
+  document.getElementById('sec-feedback').scrollIntoView({ behavior: 'smooth' });
+});
+
+/* ปุ่มเปิดสไลด์นำเสนอ — ชี้ไปหน้า ?page=slides ของ Web App เดียวกัน */
+document.getElementById('slidesLink').href = CONFIG.GAS_URL + '?page=slides';
+
+/* =========================================================================
+   ข้อมูลผู้รับผิดชอบงานตัวชี้วัด 7 งาน
+   ========================================================================= */
+let globalFacilities = MOCK_DATA.facilities;
+
+const OWNER_PROGRAMS_LIST = [
+  { id: 'ncd',     name: 'งานโรคไม่ติดต่อเรื้อรัง (NCDs)', icon: '🩺' },
+  { id: 'mch',     name: 'งานอนามัยแม่และเด็ก',            icon: '🤱' },
+  { id: 'ecd',     name: 'งานเด็กปฐมวัย',                  icon: '🧒' },
+  { id: 'vaccine', name: 'งานวัคซีน',                      icon: '💉' },
+  { id: 'dental',  name: 'งานทันตกรรม',                    icon: '🦷' },
+  { id: 'elderly', name: 'งานผู้สูงอายุ',                  icon: '🧓' },
+  { id: 'cancer',  name: 'งานมะเร็ง',                      icon: '🎗️' }
+];
+
+const OWNER_ROLES_LIST = [
+  { id: 'head',    label: 'หัวหน้างาน',         badgeClass: 'head'   },
+  { id: 'deputy1', label: 'รองหัวหน้าคนที่ 1', badgeClass: 'deputy' }
+];
+
+let ownerActiveProg = 'ncd';
+
+function ownerRenderTabs() {
+  const wrap = document.getElementById('ownerTabs');
+  wrap.innerHTML = OWNER_PROGRAMS_LIST.map(p =>
+    `<button type="button" class="owner-tab${p.id === ownerActiveProg ? ' active' : ''}" data-prog="${p.id}">${p.icon} ${p.name}</button>`
+  ).join('');
+  wrap.querySelectorAll('.owner-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      ownerActiveProg = btn.dataset.prog;
+      ownerRenderTabs();
+      ownerRenderPersons();
+    });
+  });
+}
+
+function ownerFacilityOpts() {
+  return '<option value="">— เลือก รพ.สต. —</option>' +
+    globalFacilities.map(f => `<option value="${f.name}">${f.name}</option>`).join('');
+}
+
+function ownerRenderPersons() {
+  const prog = OWNER_PROGRAMS_LIST.find(p => p.id === ownerActiveProg);
+  document.getElementById('ownerProgLabel').textContent = prog.icon + ' ' + prog.name;
+  document.getElementById('ownerPersons').innerHTML = OWNER_ROLES_LIST.map(role => `
+    <div class="owner-person">
+      <div class="owner-role-badge ${role.badgeClass}">👤 ${role.label}</div>
+      <div class="owner-fields">
+        <div class="owner-field">
+          <label>ชื่อ-สกุล <span class="req">*</span></label>
+          <input type="text" name="${prog.id}_${role.id}_name" maxlength="200"
+            placeholder="เช่น นายสมชาย ใจดี" required>
+        </div>
+        <div class="owner-field">
+          <label>ตำแหน่ง <span class="req">*</span></label>
+          <input type="text" name="${prog.id}_${role.id}_position" maxlength="200"
+            placeholder="เช่น นักวิชาการสาธารณสุขชำนาญการ" required>
+        </div>
+        <div class="owner-field">
+          <label>รพ.สต. ที่ปฏิบัติงาน <span class="req">*</span></label>
+          <select name="${prog.id}_${role.id}_facility" required>
+            ${ownerFacilityOpts()}
+          </select>
+        </div>
+        <div class="owner-field">
+          <label>เบอร์โทรติดต่อ</label>
+          <input type="tel" name="${prog.id}_${role.id}_phone" maxlength="20"
+            placeholder="เช่น 08X-XXX-XXXX">
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function ownerShowNotice(kind, text) {
+  const el = document.getElementById('ownerNotice');
+  el.className = 'fb-notice show ' + kind;
+  el.textContent = text;
+  setTimeout(() => { el.classList.remove('show'); }, 9000);
+}
+
+ownerRenderTabs();
+ownerRenderPersons();
+
+document.getElementById('ownerForm').addEventListener('submit', function (ev) {
+  ev.preventDefault();
+  const form = ev.target;
+  const prog = OWNER_PROGRAMS_LIST.find(p => p.id === ownerActiveProg);
+  const persons = OWNER_ROLES_LIST.map(role => ({
+    program_id:    prog.id,
+    program_name:  prog.name,
+    role:          role.label,
+    full_name:     (form[prog.id + '_' + role.id + '_name']?.value || '').trim(),
+    position:      (form[prog.id + '_' + role.id + '_position']?.value || '').trim(),
+    facility_name: form[prog.id + '_' + role.id + '_facility']?.value || '',
+    phone:         (form[prog.id + '_' + role.id + '_phone']?.value || '').trim()
+  }));
+
+  const missing = persons.find(p => !p.full_name || !p.position || !p.facility_name);
+  if (missing) {
+    ownerShowNotice('err', 'กรุณากรอกชื่อ-สกุล ตำแหน่ง และเลือก รพ.สต. ให้ครบทุกท่าน');
+    return;
+  }
+
+  const btn = document.getElementById('ownerSubmit');
+  btn.disabled = true;
+  btn.textContent = 'กำลังบันทึก...';
+
+  fetch(CONFIG.GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'owner', persons }) })
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(res => {
+      if (res.error) throw new Error(res.error);
+      ownerShowNotice('ok', '✅ บันทึกผู้รับผิดชอบ "' + prog.name + '" เรียบร้อย (' + (res.saved || persons.length) + ' ท่าน)');
+      form.reset();
+      ownerRenderPersons();
+    })
+    .catch(err => {
+      ownerShowNotice('err', '❌ บันทึกไม่สำเร็จ: ' + err.message);
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.textContent = '💾 บันทึกข้อมูลผู้รับผิดชอบ';
+    });
+});
+</script>
+</body>
+</html>

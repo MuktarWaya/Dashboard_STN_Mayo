@@ -1,0 +1,21 @@
+# Local configuration / identifiers
+ENV.txt
+.clasp.json
+*.gsheet
+
+# Google Drive / local workspace noise
+.claude/
+.codex-work/
+stitch_dashboard_theme_selection/
+stitch_dashboard_theme_selection.zip
+
+# Generated artifacts and previews
+outputs/
+
+# Source spreadsheets / extracted planning data
+*.xlsx
+ข้อมูล backend ที่จะเชื่อมไปยัง DashboardSTN.md
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
