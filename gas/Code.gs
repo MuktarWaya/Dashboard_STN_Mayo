@@ -21,7 +21,7 @@
  */
 
 const SPREADSHEET_ID = '19Y4ColmVhopSLrIc3ppUr9kvpRpF4tBY4iI5h4aaTX4';
-const CACHE_SECONDS = 600; // cache ผลลัพธ์ 10 นาที ลดโควตาและให้โหลดเร็ว
+const CACHE_SECONDS = 60; // cache สั้น 1 นาที เพื่อให้ข้อมูลหน้า Dashboard ตามการแก้ชีตใกล้ real-time
 
 const THAI_MONTHS = {
   1: 'มกราคม', 2: 'กุมภาพันธ์', 3: 'มีนาคม', 4: 'เมษายน', 5: 'พฤษภาคม', 6: 'มิถุนายน',
@@ -92,7 +92,7 @@ function doGet(e) {
     }
   }
 
-  const cacheKey = ['v2', action, p.id || '', year, month].join(':');
+  const cacheKey = ['v3', action, p.id || '', year, month].join(':');
   const cache = CacheService.getScriptCache();
   const cached = cache.get(cacheKey);
   if (cached) return jsonOut_(cached);

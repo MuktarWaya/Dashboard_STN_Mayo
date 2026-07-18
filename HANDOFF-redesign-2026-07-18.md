@@ -144,7 +144,7 @@ GAS_URL (ปัจจุบันฝังในโค้ด): `https://script.g
 - ✅ ตรวจ production response แล้วพบ design token ใหม่, live-data deck และ mobile nav fix ครบ
 
 Production deployment ปัจจุบัน:
-`AKfycbxDSzYCX7LAxVcKi8YECaOEI2-_Jqthlvzh-z_-sBZpo_2QM3Rhp-dvB6iaTYAJfqsJ @8`
+`AKfycbxDSzYCX7LAxVcKi8YECaOEI2-_Jqthlvzh-z_-sBZpo_2QM3Rhp-dvB6iaTYAJfqsJ @9`
 
 ### เพิ่มโหมดแยก 7 งาน
 
@@ -160,6 +160,6 @@ Production deployment ปัจจุบัน:
 
 - เพิ่ม `programFacilityDetails` ใน response ของ `action=all` และเพิ่ม `facilities`/`facilityDetails` ใน `action=program&id=<program>`
 - backend อ่านข้อมูลรายหน่วยจาก `source_sheet`, `source_column`, `denominator_key` และ `dashboard_role` ใน `MetricCatalog` ชุดเดียวกับที่ใช้คำนวณภาพรวม
-- เปลี่ยน cache namespace เป็น `v2` เพื่อไม่ให้ response หลัง deploy ปะปนกับ cache ของ contract รุ่นเดิม
-- ตรวจ production ปี 2569 เดือน 7 แล้ว: NCD/MCH/Vaccine/ECD/Dental/Cancer มี 13 แถว และ Elderly มี 12 แถวตามข้อมูลต้นทาง
+- เปลี่ยน cache namespace เป็น `v3` และลดอายุ cache จาก 10 นาทีเหลือ 1 นาที เพื่อให้การแก้ Google Sheets ปรากฏบน Dashboard ใกล้ real-time มากขึ้น
+- ตรวจ production ปี 2569 เดือน 7 แล้ว: ทั้ง 7 งานมีข้อมูล 13 รพ.สต. ครบ
 - ตรวจ NCD รหัสหน่วย `09941` (รพ.สต.ตรัง) ตรงกับ `Data_NCD`: 80%, 62.39%, 33.63%, 45.64% และหน้า Dashboard แสดงตารางครบ 13 หน่วย
