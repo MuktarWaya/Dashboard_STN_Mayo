@@ -9,7 +9,7 @@
 
 1. เปลี่ยนดีไซน์ Dashboard + หน้านำเสนอ จากสไตล์เก่า **"Warm Cartoon Neubrutalism"** → **"Clinical Precision"** (โทน tailwindcss.com แต่คงเอกลักษณ์สีเขียวสาธารณสุข)
 2. เขียนหน้านำเสนอ (`presentation.html`) ใหม่ให้ **ดึงข้อมูลจริงเรียลไทม์จาก GAS API** (เดิมเป็นตัวเลข hardcode / demo)
-3. **ไฟล์ที่ deploy จริงอยู่ใน `gas/`** (clasp `rootDir: gas`) — พอร์ตเข้าไปแล้ว แต่ **ยังไม่ได้ `clasp push`** และ **ยังไม่ได้เปิดเรนเดอร์จริงในเบราว์เซอร์**
+3. **ไฟล์ที่ deploy จริงอยู่ใน `gas/`** (clasp `rootDir: gas`) — พอร์ต ทดสอบ และ deploy production แล้ว
 
 ---
 
@@ -144,15 +144,22 @@ GAS_URL (ปัจจุบันฝังในโค้ด): `https://script.g
 - ✅ ตรวจ production response แล้วพบ design token ใหม่, live-data deck และ mobile nav fix ครบ
 
 Production deployment ปัจจุบัน:
-`AKfycbxDSzYCX7LAxVcKi8YECaOEI2-_Jqthlvzh-z_-sBZpo_2QM3Rhp-dvB6iaTYAJfqsJ @7`
+`AKfycbxDSzYCX7LAxVcKi8YECaOEI2-_Jqthlvzh-z_-sBZpo_2QM3Rhp-dvB6iaTYAJfqsJ @8`
 
 ### เพิ่มโหมดแยก 7 งาน
 
 - เพิ่ม navigation ระดับ Dashboard: `ภาพรวม` + งานทั้ง 7 งาน โดยหน้าภาพรวมและลำดับ Landing เดิมยังอยู่ครบ
 - การ์ดงานในหน้าภาพรวมมีปุ่ม `ดูรายละเอียดงาน` เพื่อเปิด workspace ของงานนั้น
 - workspace รายงานแสดงความก้าวหน้า สถานะ รอบข้อมูล และตัวชี้วัด real-time จาก API ชุดเดียวกับหน้ารวม
-- งานวัคซีนและงานมะเร็งแสดงตารางผลงานราย 13 รพ.สต. เพราะ backend มีข้อมูลระดับหน่วยแล้ว
-- อีก 5 งานแสดงตัวชี้วัดภาพรวมพร้อมพื้นที่รองรับข้อมูลราย รพ.สต. เมื่อ backend เพิ่มข้อมูลในอนาคต
+- ทั้ง 7 งานแสดงตารางผลงานราย รพ.สต. จาก `Data_*` ตาม `MetricCatalog` แล้ว ไม่ได้จำกัดเฉพาะวัคซีนและมะเร็ง
 - รองรับ direct link รูปแบบ `?program=ncd`, `?program=mch`, `?program=ecd`, `?program=vaccine`, `?program=dental`, `?program=elderly`, `?program=cancer`
 - mobile ใช้แถบโหมดเลื่อนแนวนอน ไม่มี horizontal overflow ของทั้งหน้า
 - ชื่อหน่วยบริการในตารางย่ออัตโนมัติเฉพาะมือถือ เช่น `โรงพยาบาลส่งเสริมสุขภาพตำบลตรัง` → `รพ.สต.ตรัง`; desktop ยังคงชื่อเต็มและรหัสหน่วยบริการ โดยชื่อเต็มยังอยู่ใน tooltip/accessible label บนมือถือ
+
+### แก้ข้อมูลรายหน่วยบริการทั้ง 7 งาน
+
+- เพิ่ม `programFacilityDetails` ใน response ของ `action=all` และเพิ่ม `facilities`/`facilityDetails` ใน `action=program&id=<program>`
+- backend อ่านข้อมูลรายหน่วยจาก `source_sheet`, `source_column`, `denominator_key` และ `dashboard_role` ใน `MetricCatalog` ชุดเดียวกับที่ใช้คำนวณภาพรวม
+- เปลี่ยน cache namespace เป็น `v2` เพื่อไม่ให้ response หลัง deploy ปะปนกับ cache ของ contract รุ่นเดิม
+- ตรวจ production ปี 2569 เดือน 7 แล้ว: NCD/MCH/Vaccine/ECD/Dental/Cancer มี 13 แถว และ Elderly มี 12 แถวตามข้อมูลต้นทาง
+- ตรวจ NCD รหัสหน่วย `09941` (รพ.สต.ตรัง) ตรงกับ `Data_NCD`: 80%, 62.39%, 33.63%, 45.64% และหน้า Dashboard แสดงตารางครบ 13 หน่วย

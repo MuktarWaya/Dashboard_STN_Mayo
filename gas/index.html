@@ -790,6 +790,31 @@ function programFacilityTable(DATA, program, statusOf, labels) {
   let targetLabel = 'เป้าหมาย';
   let resultLabel = 'ดำเนินการแล้ว';
 
+  const contractRows = DATA.programFacilityDetails?.[program.id] || [];
+  if (contractRows.length) {
+    const metricColumns = program.metrics.map(metric => ({ key: metric.key, label: metric.label }));
+    const sortedRows = [...contractRows].sort((a, b) => b.progressPercent - a.progressPercent);
+    return `<div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>หน่วยบริการ</th>
+          ${metricColumns.map(metric => `<th>${metric.label}</th>`).join('')}
+          <th>ความก้าวหน้ารวม</th><th>สถานะ</th>
+        </tr></thead>
+        <tbody>${sortedRows.map(row => {
+          const status = statusOf(row.progressPercent);
+          const metricMap = Object.fromEntries((row.metrics || []).map(metric => [metric.key, metric]));
+          return `<tr>
+            <td class="name">${facilityNameView(facilityName(row.facilityId))}</td>
+            ${metricColumns.map(column => `<td>${metricMap[column.key] ? formatProgramMetric(metricMap[column.key]) : '—'}</td>`).join('')}
+            <td><div class="cell-bar"><div class="bar"><span class="fill-${status}" style="width:${Math.min(row.progressPercent, 100)}%"></span></div><span class="n">${Number(row.progressPercent).toFixed(1)}%</span></div></td>
+            <td><span class="chip ${status}"><span class="dot"></span>${labels[status]}</span></td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>`;
+  }
+
   if (program.id === 'vaccine' && Array.isArray(DATA.facilityProgress)) {
     resultLabel = 'ฉีดตามเกณฑ์';
     rows = DATA.facilityProgress.map(row => ({

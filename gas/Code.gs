@@ -92,7 +92,7 @@ function doGet(e) {
     }
   }
 
-  const cacheKey = ['v1', action, p.id || '', year, month].join(':');
+  const cacheKey = ['v2', action, p.id || '', year, month].join(':');
   const cache = CacheService.getScriptCache();
   const cached = cache.get(cacheKey);
   if (cached) return jsonOut_(cached);
@@ -113,7 +113,12 @@ function doGet(e) {
       case 'program': {
         const prog = data.programs.filter(function (x) { return x.id === p.id; })[0];
         if (!prog) throw new Error('ไม่พบงาน id=' + p.id);
-        result = { meta: data.meta, program: prog };
+        result = {
+          meta: data.meta,
+          program: prog,
+          facilities: data.facilities,
+          facilityDetails: (data.programFacilityDetails && data.programFacilityDetails[p.id]) || []
+        };
         if (p.id === 'vaccine') result.monthlyProgress = data.monthlyProgress.vaccine;
         if (p.id === 'cancer') result.cancerTracking = data.cancerTracking;
         break;
@@ -300,6 +305,40 @@ function buildDataFromContract_(ss, year, month) {
     };
   });
 
+  // รายละเอียดราย รพ.สต. ของทั้ง 7 งาน — ใช้ source_sheet/source_column
+  // จาก MetricCatalog ชุดเดียวกับที่คำนวณภาพรวม เพื่อไม่ให้ frontend สร้างสูตรซ้ำ
+  const programFacilityDetails = {};
+  owners.forEach(function (o) {
+    const catalog = metricsCatalog.filter(function (m) { return m.program_id === o.program_id; });
+    const primary = catalog.filter(function (m) {
+      return String(m.dashboard_role || '').toLowerCase() === 'primary';
+    });
+    const sourceSheet = catalog.length ? catalog[0].source_sheet : '';
+    const rows = sheetRows[sourceSheet] || [];
+
+    programFacilityDetails[o.program_id] = rows.map(function (row) {
+      const metrics = catalog.map(function (metric) {
+        const result = rowMetricValue_(row, metric);
+        return {
+          key: metric.metric_key,
+          label: metric.metric_label,
+          value: result.displayValue
+        };
+      });
+      const progressParts = primary.map(function (metric) {
+        return rowMetricValue_(row, metric).progressPercent;
+      }).filter(function (value) { return !isNaN(value); });
+
+      return {
+        facilityId: row.facility_code || splitFacility_(row.facility_id).code,
+        progressPercent: progressParts.length
+          ? round1_(progressParts.reduce(function (sum, value) { return sum + value; }, 0) / progressParts.length)
+          : 0,
+        metrics: metrics
+      };
+    });
+  });
+
   const vaccineRows = sheetRows.Data_Vaccine || [];
   const cancerRows = sheetRows.Data_Cancer || [];
   const facilityProgress = facilities.map(function (f) {
@@ -388,6 +427,7 @@ function buildDataFromContract_(ss, year, month) {
     },
     facilities: facilities,
     programs: programs,
+    programFacilityDetails: programFacilityDetails,
     facilityProgress: facilityProgress,
     monthlyProgress: { vaccine: { targetTotal: targetTotal, unit: 'ราย (สะสม)', months: months } },
     cancerTracking: {
@@ -573,6 +613,23 @@ function findByFacility_(rows, facilityCode) {
   return rows.filter(function (r) {
     return String(r.facility_code || splitFacility_(r.facility_id).code) === String(facilityCode);
   })[0] || {};
+}
+
+function rowMetricValue_(row, metric) {
+  const source = metric.source_column;
+  const den = metric.denominator_key;
+  const valueType = String(metric.value_type || '').toLowerCase();
+  const value = num_(row[source]);
+
+  if (valueType === 'percent') {
+    return { displayValue: value, progressPercent: value };
+  }
+
+  const denominator = den ? num_(row[den]) : 0;
+  return {
+    displayValue: value,
+    progressPercent: denominator ? pct_(value, denominator) : value
+  };
 }
 
 function aggregateMetric_(rows, metric) {
