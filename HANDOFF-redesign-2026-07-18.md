@@ -144,7 +144,7 @@ GAS_URL (ปัจจุบันฝังในโค้ด): `https://script.g
 - ✅ ตรวจ production response แล้วพบ design token ใหม่, live-data deck และ mobile nav fix ครบ
 
 Production deployment ปัจจุบัน:
-`AKfycbxDSzYCX7LAxVcKi8YECaOEI2-_Jqthlvzh-z_-sBZpo_2QM3Rhp-dvB6iaTYAJfqsJ @9`
+`AKfycbxDSzYCX7LAxVcKi8YECaOEI2-_Jqthlvzh-z_-sBZpo_2QM3Rhp-dvB6iaTYAJfqsJ @10`
 
 ### เพิ่มโหมดแยก 7 งาน
 
@@ -163,3 +163,13 @@ Production deployment ปัจจุบัน:
 - เปลี่ยน cache namespace เป็น `v3` และลดอายุ cache จาก 10 นาทีเหลือ 1 นาที เพื่อให้การแก้ Google Sheets ปรากฏบน Dashboard ใกล้ real-time มากขึ้น
 - ตรวจ production ปี 2569 เดือน 7 แล้ว: ทั้ง 7 งานมีข้อมูล 13 รพ.สต. ครบ
 - ตรวจ NCD รหัสหน่วย `09941` (รพ.สต.ตรัง) ตรงกับ `Data_NCD`: 80%, 62.39%, 33.63%, 45.64% และหน้า Dashboard แสดงตารางครบ 13 หน่วย
+
+### Executive Briefing สำหรับประชุม (2026-07-19)
+
+- เปลี่ยน `presentation.html` จากสไลด์แนะนำตัวระบบ/roadmap เป็นสไลด์ประชุมติดตามงาน 12 หน้า ซึ่งสร้างใหม่จากข้อมูลสดทุกครั้งที่เปิด
+- โครงเรื่องใหม่: ปก → Executive pulse → Priority map → 7 หน้างาน → หน่วยที่ควรสนับสนุนข้ามงาน → ร่างมติประชุม
+- แต่ละหน้างานแสดงตัวเลขสำคัญ อันดับ รพ.สต. บน 2/ล่าง 3 ความเสี่ยง ตัวชี้วัดต่ำสุด และข้อเสนอแผน 30 วัน
+- เพิ่ม rule-based Smart Insight จากเกณฑ์สถานะ ช่องว่างระหว่างหน่วย และตัวชี้วัดต่ำสุด โดยไม่ส่งข้อมูลไปยังบริการ AI ภายนอก
+- แสดงเวลาที่ดึง Google Sheets และเวลาที่สร้างสรุป พร้อมปุ่ม `↻` สำหรับดึงข้อมูลใหม่ระหว่างประชุม
+- ถ้าเชื่อมต่อไม่ได้ จะใช้ข้อมูลล่าสุดที่เคยโหลดสำเร็จจากเครื่องและแสดง badge ว่าเป็นข้อมูล cached; ไม่มีตัวเลข mock hardcode
+- ตรวจครบทั้ง 12 สไลด์ที่ 1280×720 แล้วไม่มี horizontal/vertical overflow; มือถือ 390×844 ไม่มี horizontal overflowและเลื่อนแนวตั้งได้
